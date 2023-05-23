@@ -1,8 +1,11 @@
-import React, { useState } from "react";
 import Button from "../lib/Button";
 import styled from "styled-components";
 
-const StyledForm = styled.form``;
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 const LoginRegisterForm = ({
   state,

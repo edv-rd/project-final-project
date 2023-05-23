@@ -1,8 +1,9 @@
-import React from "react";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Button from "./lib/Button";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Cookies from "universal-cookie";
+
 const cookies = new Cookies();
 
 const Community = ({ API_URL }) => {
@@ -18,10 +19,12 @@ const Community = ({ API_URL }) => {
   return (
     <>
       {token ? (
-        <>
-          <Profile API_URL={API_URL} />
+        <BrowserRouter>
           <Button handleClick={logout} text="Log out!" variant="warning" />
-        </>
+          <Routes>
+            <Route path="/" element={<Profile API_URL={API_URL} />} />
+          </Routes>
+        </BrowserRouter>
       ) : (
         <Login API_URL={API_URL} />
       )}

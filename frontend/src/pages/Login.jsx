@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 import LoginRegisterForm from "../components/LoginRegisterForm";
+import Notification from "../lib/Notification";
 
 const Login = ({ API_URL }) => {
   const [loginOrRegister, setLoginOrRegister] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState({});
+
+  const handleNotification = (variant, message) => {
+    setNotification({
+      message: message,
+      variant: variant,
+      visible: true,
+    });
+  };
 
   const handleFormSubmit = (event, state) => {
     switch (state) {
@@ -24,9 +34,19 @@ const Login = ({ API_URL }) => {
                 path: "/",
               });
               window.location.href = "/";
+            } else {
+              setNotification({
+                message: "error logging in",
+                variant: "error",
+              });
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            setNotification({
+              message: error,
+              variant: "error",
+            });
+          });
 
         break;
       case "register":
@@ -42,9 +62,19 @@ const Login = ({ API_URL }) => {
                 path: "/",
               });
               window.location.href = "/";
+            } else {
+              setNotification({
+                message: "error registering",
+                variant: "error",
+              });
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            setNotification({
+              message: error,
+              variant: "error",
+            });
+          });
         break;
     }
   };
@@ -59,6 +89,12 @@ const Login = ({ API_URL }) => {
 
   return (
     <>
+      {notification && (
+        <Notification
+          variant={notification.variant}
+          message={notification.message}
+        />
+      )}
       <h1>Please log in first:</h1>
       <LoginRegisterForm
         state={loginOrRegister}
@@ -73,14 +109,14 @@ const Login = ({ API_URL }) => {
 
       {loginOrRegister === "login" ? (
         <p>
-          No account?
+          No account?{" "}
           <a href="#" onClick={handleLoginOrRegister}>
             Register!
           </a>
         </p>
       ) : (
         <p>
-          Already registered?
+          Already registered?{" "}
           <a href="#" onClick={handleLoginOrRegister}>
             Login!
           </a>
