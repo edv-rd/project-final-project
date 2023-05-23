@@ -17,6 +17,10 @@ const User = mongoose.model("User", {
     minlength: 3,
     maxlength: 12,
   },
+  email: {
+    type: String,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
@@ -31,14 +35,25 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 const authenticateUser = async (req, res, next) => {
-    const user = await User.findOne({ accessToken: req.header('Authorization') });
+  const accessToken = req.header("Authorization");
+  try {
+    const user = await User.findOne({accessToken: accessToken});
     if (user) {
-        req.user = user;
-        next();
+    req.user = user;
+    next();
     } else {
-        res.status(401).json({loggedOut: true})
+        res.status(401).json({
+          success: false,
+          response: "Please log in"
+      })
     }
-}
+  } catch (e) {
+    res.status(500).json({
+     success: false,
+      response: e
+    });
+  }
+};
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -47,27 +62,60 @@ app.get("/", (req, res) => {
   res.send("Hej värld!");
 });
 
-app.post("/users", async (req, res) => {
-    try {
-        const {name, password} = req.body;
-        const user = new User({name, password: bcrypt.hashSync(password)});
-        user.save();
-        res.status(201).json({id: user._id, accessToken: user.accessToken})
-    } catch (err) { 
-        res.status(400).json({message: "Could not create user", errors: err.errors});
-}})
+app.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    const salt = bcrypt.genSaltSync();
+    const newUser = await new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, salt)
+    }).save();
+    res.status(201).json({
+      success: true,
+      response: {
+        name: newUser.name,
+        id: newUser._id,
+        accessToken: newUser.accessToken
+      }
+    })
+} catch (e) {
+  res.status(400).json({
+    success: false,
+    response: e
+    })
+  }
+});
 
 app.post("/profile", authenticateUser);
 app.post("/profile", (req, res) => {
-     res.send(req.user)
+  const profileData = { name: req.user.name, email: req.user.email };
+  res.send(profileData);
 });
 
-app.post("/sessions", async (req, res) => {
-  const user = await User.findOne({ name: req.body.name });
-  if (user && bcrypt.compareSync(req.body.password, user.password)) {
-    res.json({ userId: user._id, accessToken: user.accessToken });
-  } else {
-    res.json({ notFound: true });
+app.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user && bcrypt.compareSync(req.body.password, user.password)) {
+      res.status(200).json({
+        success: true,
+        response: {
+          username: user.name,
+          id: user._id,
+          accessToken: user.accessToken,
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        response: "Credentials do not match",
+      });
+    }
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      response: e,
+    });
   }
 });
 
