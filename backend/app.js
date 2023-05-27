@@ -62,14 +62,23 @@ app.get("/", (req, res) => {
   res.send("Hej värld!");
 });
 
+app.get("/auth", async (req, res) => {
+  const accessToken = req.header("Authorization");
+  try {
+    const user = await User.findOne({accessToken: accessToken});
+    if (user) {
+    res.status(201).json({success: true, response: {user: user}})
+} } catch (e) { return "Error: " + e.message; };
+})
+
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const salt = bcrypt.genSaltSync();
     const newUser = await new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, salt)
+      name: name,
+      email: email,
+      password: bcrypt.hashSync(password, salt)
     }).save();
     res.status(201).json({
       success: true,
@@ -87,10 +96,10 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/profile", authenticateUser);
-app.post("/profile", (req, res) => {
-  const profileData = { name: req.user.name, email: req.user.email };
-  res.send(profileData);
+// app.post("/profile", authenticateUser);
+app.get("/profile/:profileId", async (req, res) => {
+  const profile = await User.findOne({ _id: req.params.profileId})
+  res.send(profile);
 });
 
 app.post("/login", async (req, res) => {

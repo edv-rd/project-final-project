@@ -11,14 +11,6 @@ const Login = ({ API_URL }) => {
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState({});
 
-  const handleNotification = (variant, message) => {
-    setNotification({
-      message: message,
-      variant: variant,
-      visible: true,
-    });
-  };
-
   const handleFormSubmit = (event, state) => {
     switch (state) {
       case "login":
@@ -53,7 +45,7 @@ const Login = ({ API_URL }) => {
         fetch(`${API_URL}/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: name, email, password }),
+          body: JSON.stringify({ name: name, email, password }),
         })
           .then((response) => response.json())
           .then((data) => {

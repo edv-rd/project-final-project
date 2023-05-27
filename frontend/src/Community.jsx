@@ -1,34 +1,19 @@
-import Profile from "./pages/Profile";
-import Login from "./pages/Login";
-import Button from "./lib/Button";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Cookies from "universal-cookie";
+import HeaderMenu from "./pages/HeaderMenu";
+import { Outlet, useLoaderData } from "react-router-dom";
+import styled from "styled-components";
 
-const cookies = new Cookies();
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const Community = ({ API_URL }) => {
-  const token = cookies.get("token");
-
-  const logout = () => {
-    // destroy the cookie
-    cookies.remove("token", { path: "/" });
-    // redirect user to the landing page
-    window.location.href = "/";
-  };
-
+const Community = () => {
+  const data = useLoaderData();
   return (
-    <>
-      {token ? (
-        <BrowserRouter>
-          <Button handleClick={logout} text="Log out!" variant="warning" />
-          <Routes>
-            <Route path="/" element={<Profile API_URL={API_URL} />} />
-          </Routes>
-        </BrowserRouter>
-      ) : (
-        <Login API_URL={API_URL} />
-      )}
-    </>
+    <StyledContainer>
+      <HeaderMenu user={data.response.user} />
+      <Outlet />
+    </StyledContainer>
   );
 };
 
