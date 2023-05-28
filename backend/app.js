@@ -29,6 +29,13 @@ const User = mongoose.model("User", {
     type: String,
     default: () => crypto.randomBytes(128).toString("hex"),
   },
+  profile: {
+    about_me: { type: String, default: "",  maxlength: 200 },
+    interests: { type: String, default: "",  maxlength: 200 },
+    occupation: { type: String, default: "",  maxlength: 200 },
+    picture: { type: String, default: "" },
+    birthday: { type: String, default: "" },
+  },
 });
 
 const port = process.env.PORT || 3000;
@@ -37,20 +44,20 @@ const app = express();
 const authenticateUser = async (req, res, next) => {
   const accessToken = req.header("Authorization");
   try {
-    const user = await User.findOne({accessToken: accessToken});
+    const user = await User.findOne({ accessToken: accessToken });
     if (user) {
-    req.user = user;
-    next();
+      req.user = user;
+      next();
     } else {
-        res.status(401).json({
-          success: false,
-          response: "Please log in"
-      })
+      res.status(401).json({
+        success: false,
+        response: "Please log in",
+      });
     }
   } catch (e) {
     res.status(500).json({
-     success: false,
-      response: e
+      success: false,
+      response: e,
     });
   }
 };
@@ -65,11 +72,14 @@ app.get("/", (req, res) => {
 app.get("/auth", async (req, res) => {
   const accessToken = req.header("Authorization");
   try {
-    const user = await User.findOne({accessToken: accessToken});
+    const user = await User.findOne({ accessToken: accessToken });
     if (user) {
-    res.status(201).json({success: true, response: {user: user}})
-} } catch (e) { return "Error: " + e.message; };
-})
+      res.status(201).json({ success: true, response: { user: user } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+});
 
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
@@ -78,28 +88,46 @@ app.post("/register", async (req, res) => {
     const newUser = await new User({
       name: name,
       email: email,
-      password: bcrypt.hashSync(password, salt)
+      password: bcrypt.hashSync(password, salt),
     }).save();
     res.status(201).json({
       success: true,
       response: {
         name: newUser.name,
         id: newUser._id,
-        accessToken: newUser.accessToken
-      }
-    })
-} catch (e) {
-  res.status(400).json({
-    success: false,
-    response: e
-    })
+        accessToken: newUser.accessToken,
+      },
+    });
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+    });
   }
 });
 
-// app.post("/profile", authenticateUser);
 app.get("/profile/:profileId", async (req, res) => {
-  const profile = await User.findOne({ _id: req.params.profileId})
+  const profile = await User.findOne({ _id: req.params.profileId });
   res.send(profile);
+});
+
+//app.get("/profile/edit", authenticateUser);
+
+app.post("/profile/edit", async (req, res) => {
+  const accessToken = req.header("Authorization");
+  try {
+    const user = await User.findOneAndUpdate(
+      { accessToken: accessToken }, 
+      { $set: {"profile.about_me": req.body.about_me, 
+      "profile.interests": req.body.interests,
+    "profile.occupation": req.body.occupation}});
+    if (user) {
+      console.log(req.body);
+      res.status(201).json({ success: true, response: { user: user } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
 });
 
 app.post("/login", async (req, res) => {

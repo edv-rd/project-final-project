@@ -1,6 +1,7 @@
 import "./App.css";
 import Community from "./Community";
 import Profile from "./pages/Profile";
+import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -29,6 +30,18 @@ const router = createBrowserRouter([
         element: <Profile />,
         loader: async ({ params }) => {
           return fetch(`${API_URL}/profile/${params.profileId}`);
+        },
+      },
+      {
+        path: "profile/edit",
+        element: <ProfileEdit API_URL={API_URL} />,
+        loader: async () => {
+          return fetch(`${API_URL}/auth`, {
+            method: "GET",
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
         },
       },
     ],
