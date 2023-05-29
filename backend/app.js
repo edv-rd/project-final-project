@@ -111,14 +111,16 @@ app.get("/guestbook/:guestbookId", async (req, res) => {
   const guestbookId = req.params.guestbookId;
   try {
     const guestbookMessages = await Entry.find({ postedTo: guestbookId })
+      .populate("postedBy")
+      .populate("postedTo")
       .sort({ postedAt: -1 })
-      .limit(10);
-
+      .limit(10)
+      .exec();
 
     if (guestbookMessages) {
       res
         .status(200)
-        .json({ response: { guestbookMessages: guestbookMessages } });
+        .json({ response: { guestbookOwner: guestbookId, guestbookMessages: guestbookMessages } });
     } else {
       return res.status(404).json({ body: { message: "Nope!" } });
     }
@@ -132,14 +134,12 @@ app.post("/guestbook/:guestbookId", authenticateUser, async (req, res) => {
   const postedTo = req.params.guestbookId;
   const content = req.body.content;
 
-
   try {
     const newEntry = await new Entry({
       postedBy: postedBy,
       postedTo: postedTo,
       content: content,
     }).save();
-
 
     if (newEntry) {
       return res.status(200).json({ success: true, body: { entry: newEntry } });
