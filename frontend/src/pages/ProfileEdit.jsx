@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -36,7 +36,8 @@ const ProfileEdit = ({ API_URL }) => {
   };
 
   const handleFormSubmit = (event) => {
-    //event.preventDefault();
+    event.preventDefault();
+    setTextUpdated(false);
 
     fetch(`${API_URL}/profile/edit`, {
       method: "POST",

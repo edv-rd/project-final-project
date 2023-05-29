@@ -1,46 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import crypto from "crypto";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt-nodejs";
+import User from "./db/userModel.js";
+import Entry from "./db/guestbookModel.js";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost:27017/final-project";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
-
-const User = mongoose.model("User", {
-  name: {
-    type: String,
-    unique: true,
-    minlength: 3,
-    maxlength: 12,
-  },
-  email: {
-    type: String,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  accessToken: {
-    type: String,
-    default: () => crypto.randomBytes(128).toString("hex"),
-  },
-  profile: {
-    about_me: { type: String, default: "",  maxlength: 200 },
-    interests: { type: String, default: "",  maxlength: 200 },
-    occupation: { type: String, default: "",  maxlength: 200 },
-    picture: { type: String, default: "" },
-    // TODO: picture uploading
-    birthday: { type: String, default: "" },
-    // TODO: birthday
-  },
-
-  // would be nice to have also loaded here one "page" of users posts
-});
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -119,15 +88,61 @@ app.get("/profile/:profileId", async (req, res) => {
 
 app.post("/profile/edit", async (req, res) => {
   const accessToken = req.header("Authorization");
-  console.log(req.body);
   try {
     const user = await User.findOneAndUpdate(
-      { accessToken: accessToken }, 
-      { $set: {"profile.about_me": req.body.about_me, 
-      "profile.interests": req.body.interests,
-    "profile.occupation": req.body.occupation}});
+      { accessToken: accessToken },
+      {
+        $set: {
+          "profile.about_me": req.body.about_me,
+          "profile.interests": req.body.interests,
+          "profile.occupation": req.body.occupation,
+        },
+      }
+    );
     if (user) {
       res.status(201).json({ success: true, response: { user: user } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+});
+
+app.get("/guestbook/:guestbookId", async (req, res) => {
+  const guestbookId = req.params.guestbookId;
+  try {
+    const guestbookMessages = await Entry.find({ postedTo: guestbookId })
+      .sort({ postedAt: -1 })
+      .limit(10);
+
+
+    if (guestbookMessages) {
+      res
+        .status(200)
+        .json({ response: { guestbookMessages: guestbookMessages } });
+    } else {
+      return res.status(404).json({ body: { message: "Nope!" } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+});
+
+app.post("/guestbook/:guestbookId", authenticateUser, async (req, res) => {
+  const postedBy = req.user._id;
+  const postedTo = req.params.guestbookId;
+  const content = req.body.content;
+
+
+  try {
+    const newEntry = await new Entry({
+      postedBy: postedBy,
+      postedTo: postedTo,
+      content: content,
+    }).save();
+
+
+    if (newEntry) {
+      return res.status(200).json({ success: true, body: { entry: newEntry } });
     }
   } catch (e) {
     return "Error: " + e.message;

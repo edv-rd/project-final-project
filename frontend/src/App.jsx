@@ -3,6 +3,7 @@ import Community from "./Community";
 import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
+import Guestbook from "./pages/Guestbook";
 import API_URL from "./lib/urls";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -41,6 +42,13 @@ const router = createBrowserRouter([
               Authorization: `${token}`,
             },
           });
+        },
+      },
+      {
+        path: "guestbook/:guestbookId",
+        element: <Guestbook />,
+        loader: async ({ params }) => {
+          return fetch(`${API_URL}/guestbook/${params.guestbookId}`);
         },
       },
     ],
