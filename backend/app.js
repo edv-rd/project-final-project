@@ -34,8 +34,12 @@ const User = mongoose.model("User", {
     interests: { type: String, default: "",  maxlength: 200 },
     occupation: { type: String, default: "",  maxlength: 200 },
     picture: { type: String, default: "" },
+    // TODO: picture uploading
     birthday: { type: String, default: "" },
+    // TODO: birthday
   },
+
+  // would be nice to have also loaded here one "page" of users posts
 });
 
 const port = process.env.PORT || 3000;
@@ -115,6 +119,7 @@ app.get("/profile/:profileId", async (req, res) => {
 
 app.post("/profile/edit", async (req, res) => {
   const accessToken = req.header("Authorization");
+  console.log(req.body);
   try {
     const user = await User.findOneAndUpdate(
       { accessToken: accessToken }, 
@@ -122,7 +127,6 @@ app.post("/profile/edit", async (req, res) => {
       "profile.interests": req.body.interests,
     "profile.occupation": req.body.occupation}});
     if (user) {
-      console.log(req.body);
       res.status(201).json({ success: true, response: { user: user } });
     }
   } catch (e) {

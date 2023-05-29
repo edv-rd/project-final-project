@@ -3,13 +3,12 @@ import Community from "./Community";
 import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
+import API_URL from "./lib/urls";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const token = cookies.get("token");
-
-const API_URL = "http://127.0.0.1:3000";
 
 const router = createBrowserRouter([
   {

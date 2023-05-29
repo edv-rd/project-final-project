@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -7,24 +7,36 @@ const token = cookies.get("token");
 
 const ProfileEdit = ({ API_URL }) => {
   const loadedData = useLoaderData();
-  const [profileData, setProfileData] = useState({});
 
-  useEffect(() => {
-    let loadedProfile = {
-      about_me: loadedData.response.user.profile.about_me,
-      interests: loadedData.response.user.profile.interests,
-      occupation: loadedData.response.user.profile.occupation,
-    };
-    setProfileData(loadedProfile);
-  }, []);
+  const [aboutMeText, setAboutMeText] = useState(
+    `${loadedData.response.user.profile.about_me}`
+  );
+  const [interestsText, setInterestsText] = useState(
+    `${loadedData.response.user.profile.interests}`
+  );
+  const [occupationText, setOccupationText] = useState(
+    `${loadedData.response.user.profile.occupation}`
+  );
+  const [textUpdated, setTextUpdated] = useState(false);
 
   const handleNewText = (event) => {
+    setTextUpdated(true);
     const inputText = event.target.value;
-    setProfileData({ [event.target.id]: inputText });
+    switch (event.target.id) {
+      case "about_me":
+        setAboutMeText(inputText);
+        break;
+      case "interests":
+        setInterestsText(inputText);
+        break;
+      case "occupation":
+        setOccupationText(inputText);
+        break;
+    }
   };
 
   const handleFormSubmit = (event) => {
-    event.preventDefault();
+    //event.preventDefault();
 
     fetch(`${API_URL}/profile/edit`, {
       method: "POST",
@@ -33,9 +45,9 @@ const ProfileEdit = ({ API_URL }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        about_me: profileData.about_me,
-        interests: profileData.interests,
-        occupation: profileData.occupation,
+        about_me: aboutMeText,
+        interests: interestsText,
+        occupation: occupationText,
       }),
     });
   };
@@ -47,27 +59,29 @@ const ProfileEdit = ({ API_URL }) => {
         <h2>About</h2>
         <textarea
           id="about_me"
-          placeholder={profileData.about_me}
-          value={profileData.about_me}
+          placeholder={aboutMeText}
+          value={aboutMeText}
           onChange={handleNewText}
         />
         <h2>Interests</h2>
         <textarea
           id="interests"
-          placeholder={profileData.interests}
-          value={profileData.interests}
+          placeholder={interestsText}
+          value={interestsText}
           onChange={handleNewText}
         />
         <h2>Occupation</h2>
         <textarea
           id="occupation"
-          placeholder={profileData.occupation}
-          value={profileData.occupation}
+          placeholder={occupationText}
+          value={occupationText}
           onChange={handleNewText}
         />
-        <button type="submit">Update profile</button>
+        <button type="submit" disabled={!textUpdated}>
+          Update profile
+        </button>
       </form>
-      <h2>Email {profileData.email}</h2>
+      <h2>Email {loadedData.email}</h2>
     </>
   );
 };
