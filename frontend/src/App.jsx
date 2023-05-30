@@ -4,7 +4,8 @@ import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
 import Guestbook from "./pages/Guestbook";
-import API_URL from "./lib/urls";
+import Journal from "./pages/Journal";
+import API_URL from "./utils/urls";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Cookies from "universal-cookie";
@@ -49,6 +50,18 @@ const router = createBrowserRouter([
         element: <Guestbook />,
         loader: async ({ params }) => {
           return fetch(`${API_URL}/guestbook/${params.guestbookId}`);
+        },
+      },
+      {
+        path: "journal/:journalId",
+        element: <Journal />,
+        loader: async ({ params }) => {
+          return fetch(`${API_URL}/journal/${params.journalId}`, {
+            method: "GET",
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
         },
       },
     ],

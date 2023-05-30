@@ -7,7 +7,7 @@ const Guestbook = () => {
 
   const guestbookOwner = guestbookMessagesData.response.guestbookOwner;
   guestbookMessages = guestbookMessagesData.response.guestbookMessages;
-
+  // TODO: do this better
   return (
     <>
       <h1>GuestBook</h1>

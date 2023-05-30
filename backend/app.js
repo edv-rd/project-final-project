@@ -4,7 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt-nodejs";
 import User from "./db/userModel.js";
-import Entry from "./db/guestbookModel.js";
+import GuestbookEntry from "./db/guestbookModel.js";
+import JournalEntry from "./db/journalModel.js";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost:27017/final-project";
@@ -19,7 +20,7 @@ const authenticateUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ accessToken: accessToken });
     if (user) {
-      req.user = user;
+      req.user = user._id;
       next();
     } else {
       res.status(401).json({
@@ -110,7 +111,7 @@ app.post("/profile/edit", async (req, res) => {
 app.get("/guestbook/:guestbookId", async (req, res) => {
   const guestbookId = req.params.guestbookId;
   try {
-    const guestbookMessages = await Entry.find({ postedTo: guestbookId })
+    const guestbookMessages = await GuestbookEntry.find({ postedTo: guestbookId })
       .populate("postedBy")
       .populate("postedTo")
       .sort({ postedAt: -1 })
@@ -130,14 +131,52 @@ app.get("/guestbook/:guestbookId", async (req, res) => {
 });
 
 app.post("/guestbook/:guestbookId", authenticateUser, async (req, res) => {
-  const postedBy = req.user._id;
+  const postedBy = req.user;
   const postedTo = req.params.guestbookId;
   const content = req.body.content;
 
   try {
-    const newEntry = await new Entry({
+    const newEntry = await new GuestbookEntry({
       postedBy: postedBy,
       postedTo: postedTo,
+      content: content,
+    }).save();
+
+    if (newEntry) {
+      return res.status(200).json({ success: true, body: { entry: newEntry } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+});
+
+app.get('/journal/:journalId', authenticateUser, async (req, res) => {
+  const postedBy = req.params.journalId;
+  try {
+    const journalEntries = await JournalEntry.find({ postedBy: postedBy })
+    .populate("postedBy")
+      .sort({ postedAt: -1 })
+      .limit(10)
+      .exec();
+
+      if (journalEntries) {
+        return res.status(200).json({ body: { owner: postedBy, journalEntries }})
+      }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+
+});
+
+app.post("/journal/:journalId", authenticateUser, async (req, res) => {
+  const postedBy = req.user;
+  const title = req.body.title;
+  const content = req.body.content;
+
+  try {
+    const newEntry = await new JournalEntry({
+      postedBy: postedBy,
+      title: title,
       content: content,
     }).save();
 

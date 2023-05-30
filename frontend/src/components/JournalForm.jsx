@@ -6,17 +6,21 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const token = cookies.get("token");
 
-const GuestbookForm = ({ owner }) => {
+const JournalForm = ({ owner }) => {
   const [entryContent, setEntryContent] = useState("");
+  const [titleContent, setTitleContent] = useState("");
 
   const handleNewText = (event) => {
     setEntryContent(event.target.value);
+  };
+  const handleNewTitle = (event) => {
+    setTitleContent(event.target.value);
   };
 
   const handleFormSubmit = () => {
     //event.preventDefault();
 
-    fetch(`${API_URL}/guestbook/${owner}`, {
+    fetch(`${API_URL}/journal/${owner}`, {
       method: "POST",
       headers: {
         Authorization: `${token}`,
@@ -24,13 +28,20 @@ const GuestbookForm = ({ owner }) => {
       },
       body: JSON.stringify({
         content: entryContent,
-        postedTo: owner,
+        title: titleContent,
+        postedBy: owner,
       }),
     });
   };
   return (
     <form onSubmit={handleFormSubmit}>
-      <h2>Guestbook entry</h2>
+      <h2>Journal entry</h2>
+      <textarea
+        id="title"
+        value={titleContent}
+        onChange={handleNewTitle}
+        placeholder="title"
+      />
       <textarea id="content" value={entryContent} onChange={handleNewText} />
 
       <button type="submit">Post!</button>
@@ -38,4 +49,4 @@ const GuestbookForm = ({ owner }) => {
   );
 };
 
-export default GuestbookForm;
+export default JournalForm;

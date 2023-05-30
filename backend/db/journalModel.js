@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 const EntrySchema = new Schema({
     postedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     postedAt: { type: Date, default: Date.now() },
-    postedTo: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    title: { type: String, required: true },
     content: { type: String, required: true },
     });
 
-export default mongoose.model("GuestbookEntry", EntrySchema);
+export default mongoose.model("JournalEntry", EntrySchema);
 // module.exports = mongoose.model.Users || mongoose.model("Users", UserSchema);
