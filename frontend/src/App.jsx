@@ -1,6 +1,7 @@
 import "./App.css";
 import Community from "./Community";
 import Profile from "./pages/Profile";
+import ProfileView from "./pages/ProfileView";
 import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
 import Guestbook from "./pages/Guestbook";
@@ -27,36 +28,45 @@ const router = createBrowserRouter([
     // TODO: create error element,
     children: [
       {
-        path: "profile/:profileId",
+        path: ":profileId/",
         element: <Profile />,
         loader: async ({ params }) => {
           return fetch(`${API_URL}/profile/${params.profileId}`);
         },
+        children: [
+          {
+            path: "profile",
+            element: <ProfileView />,
+            loader: async ({ params }) => {
+              return fetch(`${API_URL}/profile/${params.profileId}`);
+            },
+          },
+          {
+            path: "guestbook",
+            element: <Guestbook />,
+            loader: async ({ params }) => {
+              return fetch(`${API_URL}/guestbook/${params.profileId}`);
+            },
+          },
+          {
+            path: "journal",
+            element: <Journal />,
+            loader: async ({ params }) => {
+              return fetch(`${API_URL}/journal/${params.profileId}`, {
+                method: "GET",
+                headers: {
+                  Authorization: `${token}`,
+                },
+              });
+            },
+          },
+        ],
       },
       {
         path: "profile/edit",
         element: <ProfileEdit API_URL={API_URL} />,
         loader: async () => {
           return fetch(`${API_URL}/auth`, {
-            method: "GET",
-            headers: {
-              Authorization: `${token}`,
-            },
-          });
-        },
-      },
-      {
-        path: "guestbook/:guestbookId",
-        element: <Guestbook />,
-        loader: async ({ params }) => {
-          return fetch(`${API_URL}/guestbook/${params.guestbookId}`);
-        },
-      },
-      {
-        path: "journal/:journalId",
-        element: <Journal />,
-        loader: async ({ params }) => {
-          return fetch(`${API_URL}/journal/${params.journalId}`, {
             method: "GET",
             headers: {
               Authorization: `${token}`,

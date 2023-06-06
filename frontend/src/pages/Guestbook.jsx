@@ -18,7 +18,7 @@ const Guestbook = () => {
             <p key={message._id}>
               {" "}
               {message.content} from:{" "}
-              <Link to={`/profile/${message.postedBy._id}`}>
+              <Link to={`/${message.postedBy._id}/profile/`}>
                 {message.postedBy.name}
               </Link>{" "}
               kl {message.postedAt}

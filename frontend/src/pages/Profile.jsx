@@ -1,19 +1,23 @@
-import { useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData } from "react-router-dom";
+import ProfileMenu from "../pages/ProfileMenu";
+import styled from "styled-components";
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
 
 // eslint-disable-next-line react/prop-types
 const Profile = () => {
   const profileData = useLoaderData();
   return (
-    <>
-      <h1>{profileData.name}</h1>
-      <h2>Email {profileData.email}</h2>
-      <h2>About</h2>
-      <p>{profileData.profile.about_me}</p>
-      <h2>Interests</h2>
-      <p>{profileData.profile.interests}</p>
-      <h2>Occupation</h2>
-      <p>{profileData.profile.occupation}</p>
-    </>
+    <StyledContainer>
+      <ProfileMenu user={profileData} />
+      <Outlet />
+    </StyledContainer>
   );
 };
 

@@ -3,18 +3,17 @@ import JournalForm from "../components/JournalForm";
 
 const Journal = () => {
   const journalDataRaw = useLoaderData();
-  console.log(journalDataRaw);
-  const journalData = journalDataRaw.body.journalEntries;
 
   return (
     <>
       <h1>Journal!</h1>
       <JournalForm owner={journalDataRaw.body.owner} />
-      {journalData.map((entry) => {
+      {journalDataRaw.body.journalEntries.map((entry) => {
         return <li key={entry._id}>{entry.title}</li>;
       })}
     </>
   );
+  // TODO: on click on entry, show it
 };
 
 export default Journal;
