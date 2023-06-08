@@ -8,6 +8,7 @@ const cookies = new Cookies();
 const StyledHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   gap: 10px;
 `;
 
@@ -18,14 +19,12 @@ const HeaderMenu = ({ user }) => {
   };
   return (
     <StyledHeaderContainer>
-      logged in {user.name}
-      <Link to={`${user._id}/profile`}>You</Link>
+      logged in <Link to={`${user._id}/profile`}>{user.name}</Link>
       <Link to={`/profile/edit`}>Edit profile</Link>
       <Link to={`${user._id}/guestbook/`}>Guestbook</Link>
+      <Link to={`/inbox/`}>Inbox</Link>
       <Link to={`${user._id}/journal/`}>Journal</Link>
-      <a href="#" onClick={handleLogOut}>
-        Log out
-      </a>
+      <a onClick={handleLogOut}>Log out</a>
     </StyledHeaderContainer>
   );
 };

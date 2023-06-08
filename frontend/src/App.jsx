@@ -6,7 +6,22 @@ import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
 import Guestbook from "./pages/Guestbook";
 import Journal from "./pages/Journal";
+import Messages from "./pages/Messages";
+import MessageForm from "./components/MessageForm";
 import API_URL from "./utils/urls";
+
+import styled from "styled-components";
+
+const StyledWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.2fr 1.8fr;
+  gap: 10px 10px;
+  grid-template-areas:
+    "."
+    ".";
+  margin: 0 auto;
+`;
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Cookies from "universal-cookie";
@@ -60,6 +75,18 @@ const router = createBrowserRouter([
               });
             },
           },
+          {
+            path: "message",
+            element: <MessageForm />,
+            loader: async () => {
+              return fetch(`${API_URL}/auth`, {
+                method: "GET",
+                headers: {
+                  Authorization: `${token}`,
+                },
+              });
+            },
+          },
         ],
       },
       {
@@ -74,15 +101,27 @@ const router = createBrowserRouter([
           });
         },
       },
+      {
+        path: "inbox",
+        element: <Messages />,
+        loader: async () => {
+          return fetch(`${API_URL}/inbox`, {
+            method: "GET",
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
+        },
+      },
     ],
   },
 ]);
 
 function App() {
   return (
-    <>
+    <StyledWrapper>
       {token ? <RouterProvider router={router} /> : <Login API_URL={API_URL} />}
-    </>
+    </StyledWrapper>
   );
 }
 

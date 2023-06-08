@@ -6,6 +6,7 @@ import bcrypt from "bcrypt-nodejs";
 import User from "./db/userModel.js";
 import GuestbookEntry from "./db/guestbookModel.js";
 import JournalEntry from "./db/journalModel.js";
+import Message from "./db/messageModel.js"; 
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost:27017/final-project";
@@ -168,7 +169,7 @@ app.get('/journal/:journalId', authenticateUser, async (req, res) => {
 
 });
 
-app.post("/journal/:journalId", authenticateUser, async (req, res) => {
+app.post("/journal/", authenticateUser, async (req, res) => {
   const postedBy = req.user;
   const title = req.body.title;
   const content = req.body.content;
@@ -187,6 +188,51 @@ app.post("/journal/:journalId", authenticateUser, async (req, res) => {
     return "Error: " + e.message;
   }
 });
+
+app.get('/inbox', authenticateUser, async (req, res) => {
+  const postedTo = req.user;
+  try {
+    const messages = await Message.find({ postedTo: postedTo })
+    .populate("postedTo")
+    .populate("postedBy")
+      .sort({ postedAt: -1 })
+      .limit(10)
+      .exec();
+
+      if (messages) {
+        return res.status(200).json({ body: { owner: postedTo, messages }})
+      } else { return res.status(404).json({ body: { message: "Not Found" } })}
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+
+});
+
+app.post("/message", authenticateUser, async (req, res) => {
+  const postedBy = req.user;
+  const title = req.body.title;
+  const content = req.body.content;
+  const postedTo = req.body.postedTo;
+
+  try {
+    const newMessage = await new Message({
+      postedBy: postedBy,
+      title: title,
+      content: content,
+      postedTo: postedTo, 
+    }).save();
+
+    console.log(newMessage);
+
+    if (newMessage) {
+      console.log("hej")
+      return res.status(200).json({ success: true, body: { message: newMessage } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+
+})
 
 app.post("/login", async (req, res) => {
   try {
