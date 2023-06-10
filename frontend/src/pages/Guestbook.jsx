@@ -1,32 +1,33 @@
 import { useLoaderData, Link } from "react-router-dom";
 import GuestbookForm from "../components/GuestbookForm";
+import GuestbookEntry from "../components/GuestbookEntry";
+import styled from "styled-components";
+
+const StyledWrapper = styled.div``;
+
+const StyledContainer = styled.div``;
+
+const StyledNameTitle = styled.h1``;
 
 const Guestbook = () => {
-  let guestbookMessages = [];
   const guestbookMessagesData = useLoaderData();
 
   const guestbookOwner = guestbookMessagesData.response.guestbookOwner;
-  guestbookMessages = guestbookMessagesData.response.guestbookMessages;
+  const guestbookMessages = guestbookMessagesData.response.guestbookMessages;
+
   // TODO: do this better
   return (
-    <>
-      <h1>GuestBook</h1>
-      <GuestbookForm owner={guestbookOwner} />
-      {guestbookMessages.map((message) => {
-        return (
-          <>
-            <p key={message._id}>
-              {" "}
-              {message.content} from:{" "}
-              <Link to={`/${message.postedBy._id}/profile/`}>
-                {message.postedBy.name}
-              </Link>{" "}
-              kl {message.postedAt}
-            </p>
-          </>
-        );
-      })}
-    </>
+    <StyledWrapper>
+      <StyledContainer>
+        <StyledNameTitle>
+          {guestbookMessages[0].postedTo.name}'s guestbook
+        </StyledNameTitle>
+        <GuestbookForm owner={guestbookOwner} />
+        {guestbookMessages.map((message) => {
+          return <GuestbookEntry key={message._id} message={message} />;
+        })}
+      </StyledContainer>
+    </StyledWrapper>
   );
 };
 

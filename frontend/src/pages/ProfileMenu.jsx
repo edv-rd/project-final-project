@@ -8,6 +8,7 @@ const StyledWrapper = styled.div`
   background-color: aliceblue;
   width: 100%;
   padding: 10px;
+  justify-content: center;
 `;
 
 const ProfileMenu = ({ user }) => {

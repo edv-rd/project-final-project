@@ -30,7 +30,6 @@ const GuestbookForm = ({ owner }) => {
   };
   return (
     <form onSubmit={handleFormSubmit}>
-      <h2>Guestbook entry</h2>
       <textarea id="content" value={entryContent} onChange={handleNewText} />
 
       <button type="submit">Post!</button>
