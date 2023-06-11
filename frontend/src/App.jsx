@@ -87,7 +87,7 @@ const router = createBrowserRouter([
               });
             },
           },
-        ],
+        ], // everything in these brackets are children to /profile
       },
       {
         path: "profile/edit",

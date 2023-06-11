@@ -10,11 +10,18 @@ const StyledContainer = styled.div`
   padding: 5px;
 `;
 
+const StyledLink = styled(Link)`
+  display: flex;
+  flex-direction: column;
+`;
+
 const ProfileCard = ({ user }) => {
   return (
     <StyledContainer>
-      <ProfilePicture user={user} />
-      <Link to={`/${user._id}/profile`}>{user.name}</Link>
+      <StyledLink to={`/${user._id}/profile`}>
+        <ProfilePicture user={user} />
+        {user.name}
+      </StyledLink>
     </StyledContainer>
   );
 };

@@ -31,6 +31,7 @@ const UserSchema = new Schema({
         picture: { type: String, default: "" },
         // TODO: birthday
         birthday: { type: String, default: "" },
+        status: { type: String, default: "chilling" }
       },
       // would be nice to have also loaded here one "page" of users posts
 });

@@ -222,10 +222,8 @@ app.post("/message", authenticateUser, async (req, res) => {
       postedTo: postedTo, 
     }).save();
 
-    console.log(newMessage);
 
     if (newMessage) {
-      console.log("hej")
       return res.status(200).json({ success: true, body: { message: newMessage } });
     }
   } catch (e) {
