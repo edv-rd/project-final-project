@@ -8,8 +8,9 @@ const StyledWrapper = styled.div`
 `;
 
 const StyledHeaderWrapper = styled.div`
-  background-color: grey;
   padding: 20px;
+  box-shadow: 0px 0px 10px 0px #000;
+  margin-bottom: 20px;
 `;
 
 const StyledContainer = styled.div``;

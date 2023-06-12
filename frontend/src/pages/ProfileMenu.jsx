@@ -6,7 +6,6 @@ const StyledWrapper = styled.div`
   flex-direction: row;
   gap: 20px;
   background-color: aliceblue;
-  width: 100%;
   padding: 10px;
   justify-content: center;
 `;

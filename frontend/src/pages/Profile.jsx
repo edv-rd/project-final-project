@@ -8,6 +8,7 @@ const StyledContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  background-color: aliceblue;
 `;
 
 // eslint-disable-next-line react/prop-types

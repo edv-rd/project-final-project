@@ -10,8 +10,23 @@ const StyledHeaderContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   gap: 10px;
+  height: 100%;
 `;
 
+const StyledLinkContainer = styled.div`
+  padding: 5px;
+  height: 100%;
+  cursor: pointer;
+  &:hover {
+    background-color: red;
+    text-decoration: underline;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  cursor: pointer;
+`;
 const HeaderMenu = ({ user }) => {
   const handleLogOut = () => {
     cookies.remove("token", { path: "/" });
@@ -19,12 +34,24 @@ const HeaderMenu = ({ user }) => {
   };
   return (
     <StyledHeaderContainer>
-      logged in <Link to={`${user._id}/profile`}>{user.name}</Link>
-      <Link to={`/profile/edit`}>Edit profile</Link>
-      <Link to={`${user._id}/guestbook/`}>Guestbook</Link>
-      <Link to={`/inbox/`}>Inbox</Link>
-      <Link to={`${user._id}/journal/`}>Journal</Link>
-      <a onClick={handleLogOut}>Log out</a>
+      <StyledLinkContainer>
+        <StyledLink to={`${user._id}/profile`}>{user.name}</StyledLink>
+      </StyledLinkContainer>
+      <StyledLinkContainer>
+        <StyledLink to={`/profile/edit`}>Edit profile</StyledLink>
+      </StyledLinkContainer>
+      <StyledLinkContainer>
+        <StyledLink to={`${user._id}/guestbook/`}>Guestbook</StyledLink>
+      </StyledLinkContainer>
+      <StyledLinkContainer>
+        <StyledLink to={`/inbox/`}>Inbox</StyledLink>
+      </StyledLinkContainer>
+      <StyledLinkContainer>
+        <StyledLink to={`${user._id}/journal/`}>Journal</StyledLink>
+      </StyledLinkContainer>
+      <StyledLinkContainer>
+        <a onClick={handleLogOut}>Log out</a>
+      </StyledLinkContainer>
     </StyledHeaderContainer>
   );
 };
