@@ -1,9 +1,25 @@
 import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
+import UploadForm from "../components/UploadForm";
+
+import styled from "styled-components";
 
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const token = cookies.get("token");
+
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+`;
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const ProfileEdit = ({ API_URL }) => {
   const loadedData = useLoaderData();
@@ -54,36 +70,40 @@ const ProfileEdit = ({ API_URL }) => {
   };
 
   return (
-    <>
-      <h1>{loadedData.response.user.name}</h1>
-      <form onSubmit={handleFormSubmit}>
-        <h2>About</h2>
-        <textarea
-          id="about_me"
-          placeholder={aboutMeText}
-          value={aboutMeText}
-          onChange={handleNewText}
-        />
-        <h2>Interests</h2>
-        <textarea
-          id="interests"
-          placeholder={interestsText}
-          value={interestsText}
-          onChange={handleNewText}
-        />
-        <h2>Occupation</h2>
-        <textarea
-          id="occupation"
-          placeholder={occupationText}
-          value={occupationText}
-          onChange={handleNewText}
-        />
-        <button type="submit" disabled={!textUpdated}>
-          Update profile
-        </button>
-      </form>
-      <h2>Email {loadedData.email}</h2>
-    </>
+    <StyledWrapper>
+      <StyledContainer>
+        <h1>{loadedData.response.user.name}</h1>
+      </StyledContainer>
+      <StyledContainer>
+        <form onSubmit={handleFormSubmit}>
+          <h2>About</h2>
+          <textarea
+            id="about_me"
+            placeholder={aboutMeText}
+            value={aboutMeText}
+            onChange={handleNewText}
+          />
+          <h2>Interests</h2>
+          <textarea
+            id="interests"
+            placeholder={interestsText}
+            value={interestsText}
+            onChange={handleNewText}
+          />
+          <h2>Occupation</h2>
+          <textarea
+            id="occupation"
+            placeholder={occupationText}
+            value={occupationText}
+            onChange={handleNewText}
+          />
+          <button type="submit" disabled={!textUpdated}>
+            Update profile
+          </button>
+        </form>
+        <UploadForm />
+      </StyledContainer>
+    </StyledWrapper>
   );
 };
 

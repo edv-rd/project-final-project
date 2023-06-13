@@ -7,11 +7,16 @@ import User from "./db/userModel.js";
 import GuestbookEntry from "./db/guestbookModel.js";
 import JournalEntry from "./db/journalModel.js";
 import Message from "./db/messageModel.js"; 
+import multer from "multer";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost:27017/final-project";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
+
+const upload = multer({
+  dest: "images"
+})
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -257,6 +262,10 @@ app.post("/login", async (req, res) => {
     });
   }
 });
+
+app.post("/upload", upload.single("image"), async (req, res) => {
+  res.send();
+})
 
 app.listen(port, () => {
   console.log(`server körandes på http://localhost:${port}`);
