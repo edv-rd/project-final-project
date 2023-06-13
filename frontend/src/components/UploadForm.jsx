@@ -4,13 +4,14 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const token = cookies.get("token");
 
-const UploadForm = () => {
+const UploadForm = ({ owner }) => {
   const [image, setImage] = useState();
 
   const handleUpload = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", image);
+    formData.append("id", owner);
 
     fetch(`${API_URL}/upload`, {
       method: "POST",

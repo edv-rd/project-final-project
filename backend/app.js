@@ -6,8 +6,9 @@ import bcrypt from "bcrypt-nodejs";
 import User from "./db/userModel.js";
 import GuestbookEntry from "./db/guestbookModel.js";
 import JournalEntry from "./db/journalModel.js";
-import Message from "./db/messageModel.js"; 
+import Message from "./db/messageModel.js";
 import multer from "multer";
+import sharp from "sharp";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost:27017/final-project";
@@ -15,8 +16,19 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const upload = multer({
-  dest: "images"
-})
+  limits: {
+    fileSize: 10000000,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+      cb(new Error("Please upload an image."));
+    }
+    cb(undefined, true);
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.body.id);
+  },
+});
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -117,7 +129,9 @@ app.post("/profile/edit", async (req, res) => {
 app.get("/guestbook/:guestbookId", async (req, res) => {
   const guestbookId = req.params.guestbookId;
   try {
-    const guestbookMessages = await GuestbookEntry.find({ postedTo: guestbookId })
+    const guestbookMessages = await GuestbookEntry.find({
+      postedTo: guestbookId,
+    })
       .populate("postedBy")
       .populate("postedTo")
       .sort({ postedAt: -1 })
@@ -125,9 +139,12 @@ app.get("/guestbook/:guestbookId", async (req, res) => {
       .exec();
 
     if (guestbookMessages) {
-      res
-        .status(200)
-        .json({ response: { guestbookOwner: guestbookId, guestbookMessages: guestbookMessages } });
+      res.status(200).json({
+        response: {
+          guestbookOwner: guestbookId,
+          guestbookMessages: guestbookMessages,
+        },
+      });
     } else {
       return res.status(404).json({ body: { message: "Nope!" } });
     }
@@ -156,22 +173,23 @@ app.post("/guestbook/:guestbookId", authenticateUser, async (req, res) => {
   }
 });
 
-app.get('/journal/:journalId', authenticateUser, async (req, res) => {
+app.get("/journal/:journalId", authenticateUser, async (req, res) => {
   const postedBy = req.params.journalId;
   try {
     const journalEntries = await JournalEntry.find({ postedBy: postedBy })
-    .populate("postedBy")
+      .populate("postedBy")
       .sort({ postedAt: -1 })
       .limit(10)
       .exec();
 
-      if (journalEntries) {
-        return res.status(200).json({ body: { owner: postedBy, journalEntries }})
-      }
+    if (journalEntries) {
+      return res
+        .status(200)
+        .json({ body: { owner: postedBy, journalEntries } });
+    }
   } catch (e) {
     return "Error: " + e.message;
   }
-
 });
 
 app.post("/journal/", authenticateUser, async (req, res) => {
@@ -194,23 +212,24 @@ app.post("/journal/", authenticateUser, async (req, res) => {
   }
 });
 
-app.get('/inbox', authenticateUser, async (req, res) => {
+app.get("/inbox", authenticateUser, async (req, res) => {
   const postedTo = req.user;
   try {
     const messages = await Message.find({ postedTo: postedTo })
-    .populate("postedTo")
-    .populate("postedBy")
+      .populate("postedTo")
+      .populate("postedBy")
       .sort({ postedAt: -1 })
       .limit(10)
       .exec();
 
-      if (messages) {
-        return res.status(200).json({ body: { owner: postedTo, messages }})
-      } else { return res.status(404).json({ body: { message: "Not Found" } })}
+    if (messages) {
+      return res.status(200).json({ body: { owner: postedTo, messages } });
+    } else {
+      return res.status(404).json({ body: { message: "Not Found" } });
+    }
   } catch (e) {
     return "Error: " + e.message;
   }
-
 });
 
 app.post("/message", authenticateUser, async (req, res) => {
@@ -224,18 +243,18 @@ app.post("/message", authenticateUser, async (req, res) => {
       postedBy: postedBy,
       title: title,
       content: content,
-      postedTo: postedTo, 
+      postedTo: postedTo,
     }).save();
 
-
     if (newMessage) {
-      return res.status(200).json({ success: true, body: { message: newMessage } });
+      return res
+        .status(200)
+        .json({ success: true, body: { message: newMessage } });
     }
   } catch (e) {
     return "Error: " + e.message;
   }
-
-})
+});
 
 app.post("/login", async (req, res) => {
   try {
@@ -263,9 +282,49 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/upload", upload.single("image"), async (req, res) => {
-  res.send();
-})
+app.post(
+  "/upload",
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const user = await User.findOne({ _id: req.body.id });
+      const buffer = await sharp(req.file.buffer).resize({ width: 100, height: 150}).png().toBuffer()
+      user.profile.image = buffer;
+      user.save();
+      res.send();
+    } catch (e) {
+      res.status(400).send(e);
+    }
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+
+app.get("/:profileId/image", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.profileId);
+    if (!user || !user.profile.image) {
+      throw new Error();
+    }
+    //response header, use set
+    res.set("Content-Type", "image/png");
+    res.send(user.profile.image);
+  } catch (e) {
+    res.status(404).send();
+  }
+});
+
+app.delete("/upload", async (req, res) => {
+  try {
+    const user = await Users.findById(req.body.id);
+    user.image = undefined;
+    user.save();
+    res.send();
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 
 app.listen(port, () => {
   console.log(`server körandes på http://localhost:${port}`);

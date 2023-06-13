@@ -101,7 +101,7 @@ const ProfileEdit = ({ API_URL }) => {
             Update profile
           </button>
         </form>
-        <UploadForm />
+        <UploadForm owner={loadedData.response.user._id} />
       </StyledContainer>
     </StyledWrapper>
   );

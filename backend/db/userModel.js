@@ -28,9 +28,11 @@ const UserSchema = new Schema({
         interests: { type: String, default: "",  maxlength: 200 },
         occupation: { type: String, default: "",  maxlength: 200 },
         // TODO: picture uploading
-        picture: { type: String, default: "" },
         // TODO: birthday
         birthday: { type: String, default: "" },
+        image: {
+          type: Buffer
+          }
         
       },
       // would be nice to have also loaded here one "page" of users posts
