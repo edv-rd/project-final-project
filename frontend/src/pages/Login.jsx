@@ -3,8 +3,9 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 import LoginRegisterForm from "../components/LoginRegisterForm";
 import Notification from "../lib/Notification";
+import API_URL from "../utils/urls";
 
-const Login = ({ API_URL }) => {
+const Login = () => {
   const [loginOrRegister, setLoginOrRegister] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

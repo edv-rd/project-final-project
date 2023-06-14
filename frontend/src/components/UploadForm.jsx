@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import API_URL from "../utils/urls";
 import Cookies from "universal-cookie";

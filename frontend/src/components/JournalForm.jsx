@@ -1,4 +1,4 @@
-import Button from "../lib/Button";
+/* eslint-disable react/prop-types */
 import API_URL from "../utils/urls.js";
 import { useState } from "react";
 

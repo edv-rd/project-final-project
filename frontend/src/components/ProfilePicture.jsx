@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import API_URL from "../utils/urls";
 
 const ProfilePicture = ({ user }) => {

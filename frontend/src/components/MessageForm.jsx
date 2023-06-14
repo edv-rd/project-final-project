@@ -1,5 +1,4 @@
-import Button from "../lib/Button";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import API_URL from "../utils/urls.js";
 import { useState } from "react";
 
@@ -19,7 +18,7 @@ const MessageForm = () => {
     setTitleContent(event.target.value);
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = () => {
     //event.preventDefault();
 
     fetch(`${API_URL}/message`, {

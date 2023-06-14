@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
-import { Link } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: flex;

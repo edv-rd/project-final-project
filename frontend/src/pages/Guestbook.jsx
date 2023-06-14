@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import GuestbookForm from "../components/GuestbookForm";
 import GuestbookEntry from "../components/GuestbookEntry";
 import styled from "styled-components";
@@ -20,7 +20,7 @@ const Guestbook = () => {
     <StyledWrapper>
       <StyledContainer>
         <StyledNameTitle>
-          {guestbookMessages[0].postedTo.name}'s guestbook
+          Guestbook for {guestbookMessages[0].postedTo.name}
         </StyledNameTitle>
         <GuestbookForm owner={guestbookOwner} />
         {guestbookMessages.map((message) => {

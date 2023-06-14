@@ -1,6 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
 import UploadForm from "../components/UploadForm";
+import API_URL from "../utils/urls";
 
 import styled from "styled-components";
 
@@ -21,7 +22,7 @@ const StyledContainer = styled.div`
   flex-direction: row;
 `;
 
-const ProfileEdit = ({ API_URL }) => {
+const ProfileEdit = () => {
   const loadedData = useLoaderData();
 
   const [aboutMeText, setAboutMeText] = useState(
