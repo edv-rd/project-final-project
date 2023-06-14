@@ -18,7 +18,8 @@ const MessageForm = () => {
     setTitleContent(event.target.value);
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
     fetch(`${API_URL}/message`, {
       method: "POST",
       headers: {
