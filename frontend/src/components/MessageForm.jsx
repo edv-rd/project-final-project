@@ -32,6 +32,7 @@ const MessageForm = () => {
         postedTo: profileId,
       }),
     });
+    window.location.reload();
   };
   return (
     <form onSubmit={handleFormSubmit}>
