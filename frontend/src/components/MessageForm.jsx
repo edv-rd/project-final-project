@@ -19,8 +19,6 @@ const MessageForm = () => {
   };
 
   const handleFormSubmit = () => {
-    //event.preventDefault();
-
     fetch(`${API_URL}/message`, {
       method: "POST",
       headers: {
@@ -35,7 +33,12 @@ const MessageForm = () => {
     });
   };
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleFormSubmit;
+      }}
+    >
       <h2>Send message</h2>
       <textarea
         id="title"
