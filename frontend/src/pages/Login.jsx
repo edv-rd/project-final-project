@@ -2,7 +2,6 @@ import { useState } from "react";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 import LoginRegisterForm from "../components/LoginRegisterForm";
-import Notification from "../lib/Notification";
 import API_URL from "../utils/urls";
 
 const Login = () => {
@@ -10,7 +9,6 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [notification, setNotification] = useState({});
 
   const handleFormSubmit = (event, state) => {
     switch (state) {
@@ -27,20 +25,11 @@ const Login = () => {
                 path: "/",
               });
               window.location.href = "/";
-            } else {
-              setNotification({
-                message: "error logging in",
-                variant: "error",
-              });
             }
           })
           .catch((error) => {
-            setNotification({
-              message: error,
-              variant: "error",
-            });
+            console.log(error);
           });
-
         break;
       case "register":
         fetch(`${API_URL}/register`, {
@@ -55,18 +44,10 @@ const Login = () => {
                 path: "/",
               });
               window.location.href = "/";
-            } else {
-              setNotification({
-                message: "error registering",
-                variant: "error",
-              });
             }
           })
           .catch((error) => {
-            setNotification({
-              message: error,
-              variant: "error",
-            });
+            console.log(error);
           });
         break;
     }
@@ -82,12 +63,6 @@ const Login = () => {
 
   return (
     <>
-      {notification && (
-        <Notification
-          variant={notification.variant}
-          message={notification.message}
-        />
-      )}
       <h1>Please log in first:</h1>
       <LoginRegisterForm
         state={loginOrRegister}

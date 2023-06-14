@@ -1,4 +1,4 @@
 /* eslint-disable no-undef */
-const API_URL = process.env.API_URL || "http://127.0.0.1:3000";
+const API_URL = process.env.API_URL || "https://project-final-project-backend.onrender.com/";
 
 export default API_URL;

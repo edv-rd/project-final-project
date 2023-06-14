@@ -120,7 +120,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <StyledWrapper>
-      {token ? <RouterProvider router={router} /> : <Login API_URL={API_URL} />}
+      {token ? <RouterProvider router={router} /> : <Login />}
     </StyledWrapper>
   );
 }
