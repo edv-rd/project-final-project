@@ -13,8 +13,8 @@ const GuestbookForm = ({ owner }) => {
     setEntryContent(event.target.value);
   };
 
-  const handleFormSubmit = () => {
-    //event.preventDefault();
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
 
     fetch(`${API_URL}/guestbook/${owner}`, {
       method: "POST",
@@ -29,12 +29,7 @@ const GuestbookForm = ({ owner }) => {
     });
   };
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        handleFormSubmit;
-      }}
-    >
+    <form onSubmit={handleFormSubmit}>
       <textarea id="content" value={entryContent} onChange={handleNewText} />
 
       <button type="submit">Post!</button>
