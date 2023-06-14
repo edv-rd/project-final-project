@@ -13,7 +13,6 @@ const Messages = () => {
       Messages
       <StyledList>
         {messageData.body.messages.map((message) => {
-          console.log(message);
           return (
             <StyledListItem key={message._id}>
               {message.title}

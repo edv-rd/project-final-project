@@ -19,9 +19,7 @@ const Guestbook = () => {
   return (
     <StyledWrapper>
       <StyledContainer>
-        <StyledNameTitle>
-          Guestbook for {guestbookMessages[0].postedTo.name}
-        </StyledNameTitle>
+        <StyledNameTitle>Guestbook</StyledNameTitle>
         <GuestbookForm owner={guestbookOwner} />
         {guestbookMessages.map((message) => {
           return <GuestbookEntry key={message._id} message={message} />;
