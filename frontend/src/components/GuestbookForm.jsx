@@ -13,9 +13,7 @@ const GuestbookForm = ({ owner }) => {
     setEntryContent(event.target.value);
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
+  const handleFormSubmit = () => {
     fetch(`${API_URL}/guestbook/${owner}`, {
       method: "POST",
       headers: {
