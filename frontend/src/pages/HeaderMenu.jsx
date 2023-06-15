@@ -42,6 +42,9 @@ const HeaderMenu = ({ user }) => {
         <StyledLink to={`/profile/edit`}>Edit profile</StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>
+        <StyledLink to={`/bulletin/`}>Bulletin </StyledLink>
+      </StyledLinkContainer>
+      <StyledLinkContainer>
         <StyledLink to={`${user._id}/guestbook/`}>Guestbook</StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>

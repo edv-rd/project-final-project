@@ -8,6 +8,7 @@ import Guestbook from "./pages/Guestbook";
 import Journal from "./pages/Journal";
 import Messages from "./pages/Messages";
 import MessageForm from "./components/MessageForm";
+import Bulletin from "./pages/Bulletin";
 import API_URL from "./utils/urls";
 
 import styled from "styled-components";
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
           return fetch(`${API_URL}/profile/${params.profileId}`);
         },
         children: [
+          // all entries in these brackets are children to /profileid/
           {
             path: "profile",
             element: <ProfileView />,
@@ -87,7 +89,7 @@ const router = createBrowserRouter([
               });
             },
           },
-        ], // everything in these brackets are children to /profile
+        ],
       },
       {
         path: "profile/edit",
@@ -106,6 +108,18 @@ const router = createBrowserRouter([
         element: <Messages />,
         loader: async () => {
           return fetch(`${API_URL}/inbox`, {
+            method: "GET",
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
+        },
+      },
+      {
+        path: "bulletin",
+        element: <Bulletin />,
+        loader: async () => {
+          return fetch(`${API_URL}/bulletin`, {
             method: "GET",
             headers: {
               Authorization: `${token}`,
