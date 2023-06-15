@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import JournalForm from "../components/JournalForm";
+import JournalEntry from "../components/JournalEntry";
 
 const Journal = () => {
   const journalDataRaw = useLoaderData();
@@ -9,7 +10,7 @@ const Journal = () => {
       <h1>Journal!</h1>
       <JournalForm owner={journalDataRaw.body.owner} />
       {journalDataRaw.body.journalEntries.map((entry) => {
-        return <li key={entry._id}>{entry.title}</li>;
+        return <JournalEntry key={entry._id} entry={entry} />;
       })}
     </>
   );

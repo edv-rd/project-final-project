@@ -1,6 +1,17 @@
 /* eslint-disable react/prop-types */
 import API_URL from "../utils/urls.js";
 import { useState } from "react";
+import styled from "styled-components";
+
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -34,18 +45,20 @@ const JournalForm = ({ owner }) => {
     });
   };
   return (
-    <form onSubmit={handleFormSubmit}>
-      <h2>Journal entry</h2>
-      <textarea
-        id="title"
-        value={titleContent}
-        onChange={handleNewTitle}
-        placeholder="title"
-      />
-      <textarea id="content" value={entryContent} onChange={handleNewText} />
+    <StyledWrapper>
+      <StyledForm onSubmit={handleFormSubmit}>
+        <h2>Journal entry</h2>
+        <textarea
+          id="title"
+          value={titleContent}
+          onChange={handleNewTitle}
+          placeholder="title"
+        />
+        <textarea id="content" value={entryContent} onChange={handleNewText} />
 
-      <button type="submit">Post!</button>
-    </form>
+        <button type="submit">Post!</button>
+      </StyledForm>
+    </StyledWrapper>
   );
 };
 
