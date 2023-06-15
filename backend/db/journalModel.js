@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const EntrySchema = new Schema({
     postedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    postedAt: { type: Date, default: Date.now() },
+    postedAt: { type: Date, default: Date.now },
     title: { type: String, required: true },
     content: { type: String, required: true },
     });

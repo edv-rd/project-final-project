@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema({
     postedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    postedAt: { type: Date, default: Date.now() },
+    postedAt: { type: Date, default: Date.now },
     postedTo: { type: Schema.Types.ObjectId, ref: "User", required: true },
     content: { type: String, required: true },
     title: { type: String, required: true },
