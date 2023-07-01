@@ -8,10 +8,14 @@ const cookies = new Cookies();
 
 const StyledHeaderContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   gap: 10px;
   height: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const StyledLinkContainer = styled.div`
@@ -36,7 +40,7 @@ const HeaderMenu = ({ user }) => {
   return (
     <StyledHeaderContainer>
       <StyledLinkContainer>
-        <StyledLink to={`${user._id}/profile`}>{user.name}</StyledLink>
+        <StyledLink to={`${user}/profile`}>Profile</StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>
         <StyledLink to={`/profile/edit`}>Edit profile</StyledLink>
@@ -45,13 +49,13 @@ const HeaderMenu = ({ user }) => {
         <StyledLink to={`/bulletin/`}>Bulletin </StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>
-        <StyledLink to={`${user._id}/guestbook/`}>Guestbook</StyledLink>
+        <StyledLink to={`${user}/guestbook/`}>Guestbook</StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>
         <StyledLink to={`/inbox/`}>Inbox</StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>
-        <StyledLink to={`${user._id}/journal/`}>Journal</StyledLink>
+        <StyledLink to={`${user}/journal/`}>Journal</StyledLink>
       </StyledLinkContainer>
       <StyledLinkContainer>
         <a onClick={handleLogOut}>Log out</a>

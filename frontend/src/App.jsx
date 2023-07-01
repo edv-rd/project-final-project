@@ -93,7 +93,7 @@ const router = createBrowserRouter([
       },
       {
         path: "profile/edit",
-        element: <ProfileEdit API_URL={API_URL} />,
+        element: <ProfileEdit />,
         loader: async () => {
           return fetch(`${API_URL}/auth`, {
             method: "GET",

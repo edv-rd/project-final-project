@@ -1,6 +1,13 @@
 import { useLoaderData } from "react-router-dom";
+import API_URL from "../utils/urls.js";
+import { useState } from "react";
+
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("token");
+
 import styled from "styled-components";
-import BulletinForm from "../components/BulletinForm";
+import EntryForm from "../components/EntryForm";
 import GuestbookEntry from "../components/GuestbookEntry";
 
 const StyledWrapper = styled.div`
@@ -15,10 +22,34 @@ const StyledList = styled.ul``;
 const Bulletin = () => {
   const messageData = useLoaderData();
 
+  const [entryContent, setEntryContent] = useState("");
+
+  const handleNewText = (event) => {
+    setEntryContent(event.target.value);
+  };
+
+  const handleFormSubmit = () => {
+    fetch(`${API_URL}/bulletin/`, {
+      method: "POST",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: entryContent,
+        postedBy: messageData.postedBy,
+      }),
+    });
+  };
+
   return (
     <StyledWrapper>
       Bulletin board
-      <BulletinForm />
+      <EntryForm
+        value={entryContent}
+        onSubmit={handleFormSubmit}
+        onChange={handleNewText}
+      />
       <StyledList>
         {messageData.body.messages.map((message) => {
           return <GuestbookEntry key={message._id} message={message} />;

@@ -11,6 +11,8 @@ import BulletinEntry from "./db/bulletinModel.js";
 import multer from "multer";
 import sharp from "sharp";
 
+import { authenticateUser } from "./routes/authenticate.js";
+
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost:27017/final-project";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -34,27 +36,6 @@ const upload = multer({
 const port = process.env.PORT || 3000;
 const app = express();
 
-const authenticateUser = async (req, res, next) => {
-  const accessToken = req.header("Authorization");
-  try {
-    const user = await User.findOne({ accessToken: accessToken });
-    if (user) {
-      req.user = user._id;
-      next();
-    } else {
-      res.status(401).json({
-        success: false,
-        response: "Please log in",
-      });
-    }
-  } catch (e) {
-    res.status(500).json({
-      success: false,
-      response: e,
-    });
-  }
-};
-
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -62,14 +43,15 @@ app.get("/", (req, res) => {
   res.send("Hej värld!");
 });
 
-app.get("/auth", async (req, res) => {
-  const accessToken = req.header("Authorization");
-  try {
-    const user = await User.findOne({ accessToken: accessToken });
-    if (user) {
-      res.status(201).json({ success: true, response: { user: user } });
-    }
-  } catch (e) {
+app.get("/auth", authenticateUser, async (req, res) => {
+  if (req.user) {
+    res
+      .status(201)
+      .json({
+        success: true,
+        response: { user: req.user, profile: req.user.profile },
+      });
+  } else {
     return "Error: " + e.message;
   }
 });
@@ -103,8 +85,6 @@ app.get("/profile/:profileId", async (req, res) => {
   const profile = await User.findOne({ _id: req.params.profileId });
   res.send(profile);
 });
-
-//app.get("/profile/edit", authenticateUser);
 
 app.post("/profile/edit", async (req, res) => {
   const accessToken = req.header("Authorization");
@@ -289,7 +269,10 @@ app.post(
   async (req, res) => {
     try {
       const user = await User.findOne({ _id: req.body.id });
-      const buffer = await sharp(req.file.buffer).resize({ width: 100, height: 150}).png().toBuffer()
+      const buffer = await sharp(req.file.buffer)
+        .resize({ width: 100, height: 150 })
+        .png()
+        .toBuffer();
       user.profile.image = buffer;
       user.save();
       res.send();
@@ -329,7 +312,7 @@ app.delete("/upload", async (req, res) => {
 
 app.get("/bulletin", authenticateUser, async (req, res) => {
   try {
-    const messages = await BulletinEntry.find({  })
+    const messages = await BulletinEntry.find({})
       .populate("postedBy")
       .sort({ postedAt: -1 })
       .limit(10)

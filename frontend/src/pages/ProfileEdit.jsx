@@ -25,14 +25,16 @@ const StyledContainer = styled.div`
 const ProfileEdit = () => {
   const loadedData = useLoaderData();
 
+  console.log(loadedData);
+
   const [aboutMeText, setAboutMeText] = useState(
-    `${loadedData.response.user.profile.about_me}`
+    `${loadedData.response.profile.about_me}`
   );
   const [interestsText, setInterestsText] = useState(
-    `${loadedData.response.user.profile.interests}`
+    `${loadedData.response.profile.interests}`
   );
   const [occupationText, setOccupationText] = useState(
-    `${loadedData.response.user.profile.occupation}`
+    `${loadedData.response.profile.occupation}`
   );
   const [textUpdated, setTextUpdated] = useState(false);
 
@@ -73,9 +75,6 @@ const ProfileEdit = () => {
   return (
     <StyledWrapper>
       <StyledContainer>
-        <h1>{loadedData.response.user.name}</h1>
-      </StyledContainer>
-      <StyledContainer>
         <form onSubmit={handleFormSubmit}>
           <h2>About</h2>
           <textarea
@@ -102,7 +101,7 @@ const ProfileEdit = () => {
             Update profile
           </button>
         </form>
-        <UploadForm owner={loadedData.response.user._id} />
+        <UploadForm owner={loadedData.response.user} />
       </StyledContainer>
     </StyledWrapper>
   );

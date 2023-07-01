@@ -4,16 +4,22 @@ import styled from "styled-components";
 
 const StyledWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   width: 100%;
   gap: 10px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const StyledContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const StyledTextContainer = styled.div`
