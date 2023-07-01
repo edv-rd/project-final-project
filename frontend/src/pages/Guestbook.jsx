@@ -6,9 +6,7 @@ import API_URL from "../utils/urls.js";
 import Entry from "../components/Entry";
 import styled from "styled-components";
 
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
+import token from "../utils/token.js";
 
 const StyledWrapper = styled.div``;
 

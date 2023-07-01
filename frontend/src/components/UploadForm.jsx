@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import API_URL from "../utils/urls";
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
+import token from "../utils/token.js";
 
 const UploadForm = ({ owner }) => {
   const [image, setImage] = useState();

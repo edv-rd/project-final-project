@@ -5,9 +5,7 @@ import API_URL from "../utils/urls";
 
 import styled from "styled-components";
 
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
+import token from "../utils/token.js";
 
 const StyledWrapper = styled.div`
   display: flex;

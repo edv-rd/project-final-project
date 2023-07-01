@@ -1,4 +1,7 @@
 import "./App.css";
+
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import Community from "./Community";
 import Profile from "./pages/Profile";
 import ProfileView from "./pages/ProfileView";
@@ -9,7 +12,9 @@ import Journal from "./pages/Journal";
 import Messages from "./pages/Messages";
 import MessageForm from "./components/MessageForm";
 import Bulletin from "./pages/Bulletin";
+
 import API_URL from "./utils/urls";
+import token from "../utils/token.js";
 
 import styled from "styled-components";
 
@@ -23,11 +28,6 @@ const StyledWrapper = styled.div`
     ".";
   margin: 0 auto;
 `;
-
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
 
 const router = createBrowserRouter([
   {

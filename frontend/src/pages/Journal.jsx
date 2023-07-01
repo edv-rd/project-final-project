@@ -5,9 +5,7 @@ import API_URL from "../utils/urls.js";
 import EntryForm from "../components/EntryForm";
 import Entry from "../components/Entry";
 
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
+import token from "../utils/token.js";
 
 const Journal = () => {
   const journalDataRaw = useLoaderData();

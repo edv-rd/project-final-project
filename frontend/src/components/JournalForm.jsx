@@ -2,6 +2,7 @@
 import API_URL from "../utils/urls.js";
 import { useState } from "react";
 import styled from "styled-components";
+import token from "../utils/token.js";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -12,10 +13,6 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
 `;
-
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
 
 const JournalForm = ({ owner }) => {
   const [entryContent, setEntryContent] = useState("");

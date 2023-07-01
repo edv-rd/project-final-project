@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
+import Button from "../lib/Button";
 
 const StyledForm = styled.form`
   display: flex;
@@ -25,7 +26,7 @@ const EntryForm = ({
         />
       )}
       <textarea id="content" value={value} onChange={onChange} />
-      <button type="submit">Post!</button>
+      <Button type="submit" variant="confirm" text="Submit!" />
     </StyledForm>
   );
 };

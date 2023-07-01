@@ -2,9 +2,7 @@ import { useParams } from "react-router-dom";
 import API_URL from "../utils/urls.js";
 import { useState } from "react";
 
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const token = cookies.get("token");
+import token from "../utils/token.js";
 
 const MessageForm = () => {
   const { profileId } = useParams();

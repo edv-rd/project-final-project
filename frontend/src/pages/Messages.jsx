@@ -1,9 +1,9 @@
 import { useLoaderData } from "react-router-dom";
+import Entry from "../components/Entry";
 import styled from "styled-components";
 
 const StyledWrapper = styled.div``;
 const StyledList = styled.ul``;
-const StyledListItem = styled.li``;
 
 const Messages = () => {
   const messageData = useLoaderData();
@@ -13,12 +13,7 @@ const Messages = () => {
       Messages
       <StyledList>
         {messageData.body.messages.map((message) => {
-          return (
-            <StyledListItem key={message._id}>
-              {message.title}
-              {message.content}
-            </StyledListItem>
-          );
+          return <Entry key={message._id} entry={message} />;
         })}
       </StyledList>
     </StyledWrapper>
