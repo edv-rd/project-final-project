@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import API_URL from "../utils/urls.js";
 
 import EntryForm from "../components/EntryForm";
-import JournalEntry from "../components/JournalEntry";
+import Entry from "../components/Entry";
 
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -50,7 +50,7 @@ const Journal = () => {
         titleOnChange={handleNewTitle}
       />
       {journalDataRaw.body.journalEntries.map((entry) => {
-        return <JournalEntry key={entry._id} entry={entry} />;
+        return <Entry key={entry._id} entry={entry} />;
       })}
     </>
   );

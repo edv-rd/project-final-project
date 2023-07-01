@@ -3,7 +3,7 @@ import { useState } from "react";
 import EntryForm from "../components/EntryForm";
 import API_URL from "../utils/urls.js";
 
-import GuestbookEntry from "../components/GuestbookEntry";
+import Entry from "../components/Entry";
 import styled from "styled-components";
 
 import Cookies from "universal-cookie";
@@ -53,7 +53,7 @@ const Guestbook = () => {
           onChange={handleNewText}
         />
         {guestbookMessages.map((message) => {
-          return <GuestbookEntry key={message._id} message={message} />;
+          return <Entry key={message._id} entry={message} />;
         })}
       </StyledContainer>
     </StyledWrapper>
