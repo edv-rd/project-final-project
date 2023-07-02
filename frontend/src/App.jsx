@@ -107,7 +107,7 @@ const router = createBrowserRouter([
         path: "inbox",
         element: <Messages />,
         loader: async () => {
-          return fetch(`${API_URL}/inbox`, {
+          return fetch(`${API_URL}/messages`, {
             method: "GET",
             headers: {
               Authorization: `${token}`,

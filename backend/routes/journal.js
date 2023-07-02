@@ -1,4 +1,10 @@
-app.get("/journal/:journalId", authenticateUser, async (req, res) => {
+import express from "express";
+import JournalEntry from "../db/journalModel.js";
+import { authenticateUser } from "./authenticate.js";
+
+const router = express.Router();
+
+router.get("/journal/:journalId", authenticateUser, async (req, res) => {
     const postedBy = req.params.journalId;
     try {
       const journalEntries = await JournalEntry.find({ postedBy: postedBy })
@@ -17,7 +23,7 @@ app.get("/journal/:journalId", authenticateUser, async (req, res) => {
     }
   });
   
-  app.post("/journal/", authenticateUser, async (req, res) => {
+  router.post("/journal/", authenticateUser, async (req, res) => {
     const postedBy = req.user;
     const title = req.body.title;
     const content = req.body.content;
@@ -36,3 +42,5 @@ app.get("/journal/:journalId", authenticateUser, async (req, res) => {
       return "Error: " + e.message;
     }
   });
+
+  export default router;

@@ -1,4 +1,11 @@
-app.get("/bulletin", authenticateUser, async (req, res) => {
+import express from "express";
+import BulletinEntry from "../db/bulletinModel.js";
+import { authenticateUser } from "./authenticate.js";
+
+const router = express.Router();
+
+
+router.get("/", authenticateUser, async (req, res) => {
     try {
       const messages = await BulletinEntry.find({  })
         .populate("postedBy")
@@ -16,7 +23,7 @@ app.get("/bulletin", authenticateUser, async (req, res) => {
     }
   });
   
-  app.post("/bulletin", authenticateUser, async (req, res) => {
+  router.post("/", authenticateUser, async (req, res) => {
     const postedBy = req.user;
     const content = req.body.content;
   
@@ -35,3 +42,5 @@ app.get("/bulletin", authenticateUser, async (req, res) => {
       return "Error: " + e.message;
     }
   });
+
+  export default router;

@@ -1,4 +1,12 @@
-app.get("/guestbook/:guestbookId", async (req, res) => {
+import express from "express";
+import GuestbookEntry from "../db/guestbookModel.js";
+import { authenticateUser } from "./authenticate.js";
+
+
+
+const router = express.Router();
+
+router.get("/:guestbookId", async (req, res) => {
     const guestbookId = req.params.guestbookId;
     try {
       const guestbookMessages = await GuestbookEntry.find({
@@ -25,7 +33,7 @@ app.get("/guestbook/:guestbookId", async (req, res) => {
     }
   });
   
-  app.post("/guestbook/:guestbookId", authenticateUser, async (req, res) => {
+  router.post("/:guestbookId", authenticateUser, async (req, res) => {
     const postedBy = req.user;
     const postedTo = req.params.guestbookId;
     const content = req.body.content;
@@ -44,3 +52,5 @@ app.get("/guestbook/:guestbookId", async (req, res) => {
       return "Error: " + e.message;
     }
   });
+
+export default router;
