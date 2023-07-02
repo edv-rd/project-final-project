@@ -11,9 +11,9 @@ const StyledButton = styled.button`
       : "grey"};
 `;
 
-const Button = ({ handleClick, text, variant }) => {
+const Button = ({ handleClick, text, variant, disabled }) => {
   return (
-    <StyledButton onClick={handleClick} variant={variant}>
+    <StyledButton onClick={handleClick} variant={variant} disabled={disabled}>
       {text}
     </StyledButton>
   );

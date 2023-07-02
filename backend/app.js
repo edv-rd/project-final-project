@@ -45,12 +45,10 @@ app.get("/", (req, res) => {
 
 app.get("/auth", authenticateUser, async (req, res) => {
   if (req.user) {
-    res
-      .status(201)
-      .json({
-        success: true,
-        response: { user: req.user, profile: req.user.profile },
-      });
+    res.status(201).json({
+      success: true,
+      response: { user: req.user, profile: req.user.profile },
+    });
   } else {
     return "Error: " + e.message;
   }

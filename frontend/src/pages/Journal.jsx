@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import API_URL from "../utils/urls.js";
+import fetchAuth from "../utils/fetch.js";
 
 import EntryForm from "../components/EntryForm";
 import Entry from "../components/Entry";
-
-import token from "../utils/token.js";
 
 const Journal = () => {
   const journalDataRaw = useLoaderData();
@@ -21,20 +19,19 @@ const Journal = () => {
   };
 
   const handleFormSubmit = () => {
-    //event.preventDefault();
-
-    fetch(`${API_URL}/journal/`, {
+    const fetch = {
+      endpoint: "journal",
       method: "POST",
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        content: entryContent,
         title: titleContent,
+        content: entryContent,
         postedBy: journalDataRaw.body.owner,
       }),
-    });
+    };
+
+    fetchAuth(fetch).then((res) => console.log(res));
+
+    //event.preventDefault();
   };
 
   return (

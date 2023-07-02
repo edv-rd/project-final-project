@@ -1,12 +1,12 @@
 import { useLoaderData } from "react-router-dom";
-import API_URL from "../utils/urls.js";
+
 import { useState } from "react";
 
-import token from "../utils/token.js";
+import fetchAuth from "../utils/fetch";
 
 import styled from "styled-components";
 import EntryForm from "../components/EntryForm";
-import GuestbookEntry from "../components/GuestbookEntry";
+import Entry from "../components/Entry";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -27,17 +27,12 @@ const Bulletin = () => {
   };
 
   const handleFormSubmit = () => {
-    fetch(`${API_URL}/bulletin/`, {
-      method: "POST",
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: entryContent,
-        postedBy: messageData.postedBy,
-      }),
+    const fetchBody = JSON.stringify({
+      content: entryContent,
+      postedBy: messageData.postedBy,
     });
+
+    fetchAuth("bulletin", "POST", fetchBody);
   };
 
   return (
@@ -50,7 +45,8 @@ const Bulletin = () => {
       />
       <StyledList>
         {messageData.body.messages.map((message) => {
-          return <GuestbookEntry key={message._id} message={message} />;
+          console.log(message);
+          return <Entry key={message._id} entry={message} />;
         })}
       </StyledList>
     </StyledWrapper>

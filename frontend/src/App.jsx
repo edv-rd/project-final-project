@@ -14,7 +14,7 @@ import MessageForm from "./components/MessageForm";
 import Bulletin from "./pages/Bulletin";
 
 import API_URL from "./utils/urls";
-import token from "../utils/token.js";
+import token from "./utils/token.js";
 
 import styled from "styled-components";
 

@@ -2,6 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
 import UploadForm from "../components/UploadForm";
 import API_URL from "../utils/urls";
+import Button from "../lib/Button";
 
 import styled from "styled-components";
 
@@ -95,9 +96,12 @@ const ProfileEdit = () => {
             value={occupationText}
             onChange={handleNewText}
           />
-          <button type="submit" disabled={!textUpdated}>
-            Update profile
-          </button>
+          <Button
+            type="submit"
+            disabled={!textUpdated}
+            variant="confirm"
+            text="Update profile!"
+          />
         </form>
         <UploadForm owner={loadedData.response.user} />
       </StyledContainer>
