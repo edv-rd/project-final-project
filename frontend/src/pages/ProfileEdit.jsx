@@ -24,8 +24,6 @@ const StyledContainer = styled.div`
 const ProfileEdit = () => {
   const loadedData = useLoaderData();
 
-  console.log(loadedData);
-
   const [aboutMeText, setAboutMeText] = useState(
     `${loadedData.response.profile.about_me}`
   );
