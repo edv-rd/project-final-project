@@ -1,46 +1,51 @@
 import express from "express";
-import JournalEntry from "../db/journalModel.js";
+import Entry from "../db/entryModel.js";
 import { authenticateUser } from "./authenticate.js";
 
 const router = express.Router();
 
-router.get("/journal/:journalId", authenticateUser, async (req, res) => {
-    const postedBy = req.params.journalId;
-    try {
-      const journalEntries = await JournalEntry.find({ postedBy: postedBy })
-        .populate("postedBy")
-        .sort({ postedAt: -1 })
-        .limit(10)
-        .exec();
-  
-      if (journalEntries) {
-        return res
-          .status(200)
-          .json({ body: { owner: postedBy, journalEntries } });
-      }
-    } catch (e) {
-      return "Error: " + e.message;
-    }
-  });
-  
-  router.post("/journal/", authenticateUser, async (req, res) => {
-    const postedBy = req.user;
-    const title = req.body.title;
-    const content = req.body.content;
-  
-    try {
-      const newEntry = await new JournalEntry({
-        postedBy: postedBy,
-        title: title,
-        content: content,
-      }).save();
-  
-      if (newEntry) {
-        return res.status(200).json({ success: true, body: { entry: newEntry } });
-      }
-    } catch (e) {
-      return "Error: " + e.message;
-    }
-  });
+router.get("/:journalId", authenticateUser, async (req, res) => {
+  try {
+    const journalEntries = await Entry.find({
+      postedBy: req.user,
+      origin: "journal",
+    })
+      .populate("postedBy")
+      .sort({ postedAt: -1 })
+      .limit(10)
+      .exec();
 
-  export default router;
+    if (journalEntries) {
+      return res
+        .status(200)
+        .json({ body: { owner: req.user, journalEntries } });
+    } else {
+      return res.status(404).json({ body: { owner: req.params.journalId } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+});
+
+router.post("/", authenticateUser, async (req, res) => {
+  const postedBy = req.user;
+  const title = req.body.title;
+  const content = req.body.content;
+
+  try {
+    const newEntry = await new Entry({
+      postedBy: postedBy,
+      title: title,
+      content: content,
+      origin: "journal",
+    }).save();
+
+    if (newEntry) {
+      return res.status(200).json({ success: true, body: { entry: newEntry } });
+    }
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+});
+
+export default router;

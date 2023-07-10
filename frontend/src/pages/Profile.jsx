@@ -17,7 +17,7 @@ const Profile = () => {
   return (
     <StyledContainer>
       <ProfileMenu user={profileData} />
-      <Outlet />
+      <Outlet context={[profileData]} />
     </StyledContainer>
   );
 };

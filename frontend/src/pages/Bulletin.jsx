@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 
 import { useState } from "react";
 
@@ -19,6 +19,7 @@ const StyledList = styled.ul``;
 
 const Bulletin = () => {
   const messageData = useLoaderData();
+  const user = useOutletContext();
 
   const [entryContent, setEntryContent] = useState("");
 
@@ -27,12 +28,16 @@ const Bulletin = () => {
   };
 
   const handleFormSubmit = () => {
-    const fetchBody = JSON.stringify({
-      content: entryContent,
-      postedBy: messageData.postedBy,
-    });
+    const fetch = {
+      endpoint: "bulletin",
+      method: "POST",
+      body: JSON.stringify({
+        content: entryContent,
+        postedBy: user[0],
+      }),
+    };
 
-    fetchAuth("bulletin", "POST", fetchBody);
+    fetchAuth(fetch).then((res) => console.log(res));
   };
 
   return (
@@ -43,12 +48,14 @@ const Bulletin = () => {
         onSubmit={handleFormSubmit}
         onChange={handleNewText}
       />
-      <StyledList>
-        {messageData.body.messages.map((message) => {
-          console.log(message);
-          return <Entry key={message._id} entry={message} />;
-        })}
-      </StyledList>
+      {messageData.body.messages && (
+        <StyledList>
+          {messageData.body.messages.map((message) => {
+            console.log(message);
+            return <Entry key={message._id} entry={message} />;
+          })}
+        </StyledList>
+      )}
     </StyledWrapper>
   );
 };

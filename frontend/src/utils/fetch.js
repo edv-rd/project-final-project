@@ -1,9 +1,10 @@
 import API_URL from "../utils/urls";
 import token from "../utils/token.js";
 
-const fetchAuth = ({ endpoint, method, body }) => {
+const fetchAuth = ({ endpoint, method, body, id }) => {
+  if (!id) { id = ""; }
   console.log(`Fetching ${method} ${body} ${API_URL}/${endpoint}`);
-  return fetch(`${API_URL}/${endpoint}/`, {
+  return fetch(`${API_URL}/${endpoint}/${id}`, {
     method: "POST",
     headers: {
         Authorization: `${token}`,

@@ -1,12 +1,23 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import fetchAuth from "../utils/fetch.js";
+import styled from "styled-components";
 
 import EntryForm from "../components/EntryForm";
 import Entry from "../components/Entry";
 
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+const StyledList = styled.ul``;
+
 const Journal = () => {
   const journalDataRaw = useLoaderData();
+  const user = useOutletContext();
 
   const [entryContent, setEntryContent] = useState("");
   const [titleContent, setTitleContent] = useState("");
@@ -25,7 +36,7 @@ const Journal = () => {
       body: JSON.stringify({
         title: titleContent,
         content: entryContent,
-        postedBy: journalDataRaw.body.owner,
+        postedBy: user,
       }),
     };
 
@@ -35,7 +46,7 @@ const Journal = () => {
   };
 
   return (
-    <>
+    <StyledWrapper>
       <h1>Journal!</h1>
       <EntryForm
         value={entryContent}
@@ -44,10 +55,14 @@ const Journal = () => {
         titleValue={titleContent}
         titleOnChange={handleNewTitle}
       />
-      {journalDataRaw.body.journalEntries.map((entry) => {
-        return <Entry key={entry._id} entry={entry} />;
-      })}
-    </>
+      {journalDataRaw.body.journalEntries && (
+        <StyledList>
+          {journalDataRaw.body.journalEntries.map((entry) => {
+            return <Entry key={entry._id} entry={entry} />;
+          })}
+        </StyledList>
+      )}
+    </StyledWrapper>
   );
   // TODO: on click on entry, show it
 };

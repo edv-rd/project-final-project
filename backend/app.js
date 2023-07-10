@@ -88,9 +88,9 @@ app.use("/guestbook", guestbook);
 
 app.use("/journal", journal);
 
-app.use("/messages", messages);
-
 app.use("/bulletin", bulletin)
+
+app.use("/messages", messages);
 
 app.post("/login", async (req, res) => {
   try {
@@ -135,7 +135,7 @@ app.post(
       res.status(400).send(e);
     }
   },
-  (error, req, res, next) => {
+  (error, res) => {
     res.status(400).send({ error: error.message });
   }
 );

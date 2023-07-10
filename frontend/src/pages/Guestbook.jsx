@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import fetchAuth from "../utils/fetch";
 import EntryForm from "../components/EntryForm";
@@ -14,8 +14,8 @@ const StyledNameTitle = styled.h1``;
 
 const Guestbook = () => {
   const guestbookMessagesData = useLoaderData();
+  const guestbookOwner = useOutletContext();
 
-  const guestbookOwner = guestbookMessagesData.response.guestbookOwner;
   const guestbookMessages = guestbookMessagesData.response.guestbookMessages;
 
   const [entryContent, setEntryContent] = useState("");
@@ -25,12 +25,16 @@ const Guestbook = () => {
   };
 
   const handleFormSubmit = () => {
-    const fetchBody = JSON.stringify({
-      content: entryContent,
-      postedTo: guestbookOwner,
-    });
+    const fetch = {
+      endpoint: "guestbook",
+      id: guestbookOwner[0]._id,
+      method: "POST",
+      body: JSON.stringify({
+        content: entryContent,
+      }),
+    };
 
-    fetchAuth(`/guestbook/${guestbookOwner}`, "POST", fetchBody);
+    fetchAuth(fetch).then((res) => console.log(res));
   };
 
   // TODO: do this better
@@ -39,7 +43,7 @@ const Guestbook = () => {
       <StyledContainer>
         <StyledNameTitle>Guestbook</StyledNameTitle>
         <EntryForm
-          handleFormSubmit={handleFormSubmit}
+          onSubmit={handleFormSubmit}
           value={entryContent}
           onChange={handleNewText}
         />

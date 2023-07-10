@@ -1,5 +1,5 @@
 import express from "express";
-import BulletinEntry from "../db/bulletinModel.js";
+import Entry from "../db/entryModel.js";
 import { authenticateUser } from "./authenticate.js";
 
 const router = express.Router();
@@ -7,14 +7,14 @@ const router = express.Router();
 
 router.get("/", authenticateUser, async (req, res) => {
     try {
-      const messages = await BulletinEntry.find({  })
+      const bulletins = await Entry.find({ origin: "bulletin" })
         .populate("postedBy")
         .sort({ postedAt: -1 })
         .limit(10)
         .exec();
   
-      if (messages) {
-        return res.status(200).json({ body: { owner: req.user, messages } });
+      if (bulletins) {
+        return res.status(200).json({ body: { owner: req.user, bulletins } });
       } else {
         return res.status(404).json({ body: { message: "Not Found" } });
       }
@@ -28,15 +28,16 @@ router.get("/", authenticateUser, async (req, res) => {
     const content = req.body.content;
   
     try {
-      const newMessage = await new BulletinEntry({
+      const newBulletin = await new Entry({
         postedBy: postedBy,
         content: content,
+        origin: "bulletin",
       }).save();
   
-      if (newMessage) {
+      if (newBulletin) {
         return res
           .status(200)
-          .json({ success: true, body: { message: newMessage } });
+          .json({ success: true, body: { content: newBulletin } });
       }
     } catch (e) {
       return "Error: " + e.message;
