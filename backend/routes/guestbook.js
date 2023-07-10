@@ -24,9 +24,11 @@ router.get("/:guestbookId", async (req, res) => {
         },
       });
     } else {
-      return res
-        .status(404)
-        .json({ response: { guestbookOwner: req.params.guestbookId } });
+      res.status(404).json({ 
+        response: { 
+          guestbookOwner: req.params.guestbookId 
+        } 
+      });
     }
   } catch (e) {
     return "Error: " + e.message;

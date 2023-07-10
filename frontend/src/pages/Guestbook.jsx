@@ -1,4 +1,4 @@
-import { useLoaderData, useOutletContext } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
 import fetchAuth from "../utils/fetch";
 import EntryForm from "../components/EntryForm";
@@ -14,6 +14,8 @@ const StyledNameTitle = styled.h1``;
 
 const Guestbook = () => {
   const guestbookMessagesData = useLoaderData();
+  console.log(guestbookMessagesData);
+  console.log(guestbookMessagesData.response.guestbookOwner);
 
   const guestbookOwner = guestbookMessagesData.response.guestbookOwner;
   const guestbookMessages = guestbookMessagesData.response.guestbookMessages;
