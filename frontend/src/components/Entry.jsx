@@ -2,6 +2,8 @@
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
 
+import Likes from "./Likes";
+
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -25,7 +27,7 @@ const StyledParagraph = styled.p`
   margin-bottom: 10px;
 `;
 
-const Entry = ({ entry }) => {
+const Entry = ({ entry, showLikes }) => {
   return (
     <StyledContainer $read={entry.read}>
       <ProfileCard user={entry.postedBy} />
@@ -33,6 +35,7 @@ const Entry = ({ entry }) => {
         <StyledParagraph>{entry.postedAt}</StyledParagraph>
         {entry.title && <StyledParagraph>{entry.title}</StyledParagraph>}
         <StyledParagraph>{entry.content}</StyledParagraph>
+        {showLikes && <Likes entry={entry} />}
       </StyledText>
     </StyledContainer>
   );

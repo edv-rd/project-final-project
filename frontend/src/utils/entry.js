@@ -1,8 +1,8 @@
 import API_URL from "./urls";
 import token from "./token.js";
 
-const readEntry = ( id ) => {
-  return fetch(`${API_URL}/read/${id}`, {
+export const readEntry = ( id ) => {
+  return fetch(`${API_URL}/entry/read/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `${token}`,
@@ -15,4 +15,19 @@ const readEntry = ( id ) => {
     });
 };
 
-export default readEntry;
+export const likeEntry = ( id ) => {
+  return fetch(`${API_URL}/entry/like/${id}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return data;
+    });
+
+}
+
+

@@ -12,6 +12,7 @@ router.get("/:guestbookId", async (req, res) => {
     })
       .populate("postedBy")
       .populate("postedTo")
+      .populate("likes")
       .sort({ postedAt: -1 })
       .limit(10)
       .exec();

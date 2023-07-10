@@ -5,7 +5,7 @@ import EntryForm from "../components/EntryForm";
 
 import Entry from "../components/Entry";
 import styled from "styled-components";
-import readEntry from "../utils/entry";
+import { readEntry } from "../utils/entry";
 
 const StyledWrapper = styled.div``;
 
@@ -56,7 +56,7 @@ const Guestbook = () => {
               readEntry(message._id).then((res) => console.log(res));
             }
           }
-          return <Entry key={message._id} entry={message} />;
+          return <Entry key={message._id} entry={message} showLikes />;
         })}
       </StyledContainer>
     </StyledWrapper>

@@ -4,7 +4,6 @@ import cors from "cors";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt-nodejs";
 import User from "./db/userModel.js";
-import Entry from "./db/entryModel.js";
 
 
 import multer from "multer";
@@ -15,6 +14,7 @@ import guestbook from "./routes/guestbook.js";
 import journal from "./routes/journal.js";
 import messages from "./routes/messages.js";
 import bulletin from "./routes/bulletin.js";
+import entry from "./routes/entry.js";
 
 import { authenticateUser } from "./routes/authenticate.js";
 
@@ -94,28 +94,7 @@ app.use("/bulletin", bulletin);
 
 app.use("/messages", messages);
 
-app.patch("/read/:id", authenticateUser, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const entry = await Entry.findByIdAndUpdate(
-      { _id: id },
-      { "read": true } 
-    );
-
-    if (entry) {
-      res.status(200).json({
-        success: true,
-      });
-    } else {
-      res.status(400).json({ success: false });
-    }
-  } catch (e) {
-    res.status(500).json({
-      success: false,
-      response: e,
-    });
-  }
-});
+app.use("/entry", entry)
 
 app.post("/login", async (req, res) => {
   try {
@@ -191,6 +170,5 @@ app.delete("/upload", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(process.env.API_URL);
   console.log(`server körandes på http://localhost:${port}`);
 });

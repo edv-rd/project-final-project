@@ -9,7 +9,7 @@ const EntrySchema = new Schema({
     title: { type: String },
     content: { type: String, required: true },
     origin: { type: String, required: true},
-    likes: { type: Array },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User"}],
     read: { type: Boolean, default: true },
     });
 
