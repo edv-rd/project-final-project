@@ -18,14 +18,14 @@ const StyledContainer = styled.div``;
 const Community = () => {
   const data = useLoaderData();
   const user = data.response.user;
-  const userContext = { loggedInUser: user };
+
   return (
     <StyledWrapper>
       <StyledContainer>
         <StyledHeaderWrapper>
           <HeaderMenu user={user} />
         </StyledHeaderWrapper>
-        <Outlet context={userContext} />
+        <Outlet context={user} />
       </StyledContainer>
     </StyledWrapper>
   );

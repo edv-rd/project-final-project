@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, useOutletContext } from "react-router-dom";
 import ProfileMenu from "../pages/ProfileMenu";
 import styled from "styled-components";
 
@@ -16,8 +16,8 @@ const Profile = () => {
   const profileData = useLoaderData();
   return (
     <StyledContainer>
-      <ProfileMenu user={profileData} />
-      <Outlet context={[profileData]} />
+      <ProfileMenu user={profileData._id} />
+      <Outlet context={useOutletContext()} />
     </StyledContainer>
   );
 };

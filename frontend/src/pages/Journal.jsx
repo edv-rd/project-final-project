@@ -48,13 +48,15 @@ const Journal = () => {
   return (
     <StyledWrapper>
       <h1>Journal!</h1>
-      <EntryForm
-        value={entryContent}
-        onChange={handleNewText}
-        onSubmit={handleFormSubmit}
-        titleValue={titleContent}
-        titleOnChange={handleNewTitle}
-      />
+      {journalDataRaw.body.owner === user && (
+        <EntryForm
+          value={entryContent}
+          onChange={handleNewText}
+          onSubmit={handleFormSubmit}
+          titleValue={titleContent}
+          titleOnChange={handleNewTitle}
+        />
+      )}
       {journalDataRaw.body.journalEntries && (
         <StyledList>
           {journalDataRaw.body.journalEntries.map((entry) => {

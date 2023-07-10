@@ -5,9 +5,11 @@ import { authenticateUser } from "./authenticate.js";
 const router = express.Router();
 
 router.get("/:journalId", authenticateUser, async (req, res) => {
+  const journalId = req.params.journalId;
+  if (!journalId) { journalId = req.user; }
   try {
     const journalEntries = await Entry.find({
-      postedBy: req.user,
+      postedBy: journalId,
       origin: "journal",
     })
       .populate("postedBy")
@@ -18,9 +20,9 @@ router.get("/:journalId", authenticateUser, async (req, res) => {
     if (journalEntries) {
       return res
         .status(200)
-        .json({ body: { owner: req.user, journalEntries } });
+        .json({ body: { owner: journalId, journalEntries } });
     } else {
-      return res.status(404).json({ body: { owner: req.params.journalId } });
+      return res.status(404).json({ body: { owner: journalId } });
     }
   } catch (e) {
     return "Error: " + e.message;

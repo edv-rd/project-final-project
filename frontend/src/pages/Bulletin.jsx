@@ -48,10 +48,9 @@ const Bulletin = () => {
         onSubmit={handleFormSubmit}
         onChange={handleNewText}
       />
-      {messageData.body.messages && (
+      {messageData.body.bulletins && (
         <StyledList>
-          {messageData.body.messages.map((message) => {
-            console.log(message);
+          {messageData.body.bulletins.map((message) => {
             return <Entry key={message._id} entry={message} />;
           })}
         </StyledList>
