@@ -16,7 +16,7 @@ const Profile = () => {
   const profileData = useLoaderData();
   return (
     <StyledContainer>
-      <ProfileMenu user={profileData._id} />
+      <ProfileMenu user={profileData} />
       <Outlet context={useOutletContext()} />
     </StyledContainer>
   );
