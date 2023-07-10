@@ -14,9 +14,9 @@ const StyledNameTitle = styled.h1``;
 
 const Guestbook = () => {
   const guestbookMessagesData = useLoaderData();
-  const guestbookOwner = useOutletContext();
 
   const guestbookMessages = guestbookMessagesData.response.guestbookMessages;
+  console.log(guestbookMessages);
 
   const [entryContent, setEntryContent] = useState("");
 
@@ -27,7 +27,7 @@ const Guestbook = () => {
   const handleFormSubmit = () => {
     const fetch = {
       endpoint: "guestbook",
-      id: guestbookOwner[0]._id,
+      id: guestbookMessages[0].postedTo._id,
       method: "POST",
       body: JSON.stringify({
         content: entryContent,
