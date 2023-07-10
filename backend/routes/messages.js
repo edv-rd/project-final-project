@@ -1,5 +1,5 @@
 import express from "express";
-import MessageEntry from "../db/messageModel.js";
+import Entry from "../db/entryModel.js";
 import { authenticateUser } from "./authenticate.js";
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", authenticateUser, async (req, res) => {
   const postedTo = req.user;
   try {
-    const messages = await Message.find({ postedTo: postedTo })
+    const messages = await Entry.find({ postedTo: postedTo, origin: "message" })
       .populate("postedTo")
       .populate("postedBy")
       .sort({ postedAt: -1 })
@@ -31,11 +31,13 @@ router.post("/", authenticateUser, async (req, res) => {
   const postedTo = req.body.postedTo;
 
   try {
-    const newMessage = await new Message({
+    const newMessage = await new Entry({
       postedBy: postedBy,
       title: title,
       content: content,
       postedTo: postedTo,
+      origin: "message",
+      read: req.body.read
     }).save();
 
     if (newMessage) {

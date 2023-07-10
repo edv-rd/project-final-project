@@ -42,6 +42,7 @@ router.post("/:guestbookId", authenticateUser, async (req, res) => {
       postedTo: req.params.guestbookId,
       content: req.body.content,
       origin: "guestbook",
+      read: req.body.read
     }).save();
 
     if (newEntry) {

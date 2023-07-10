@@ -9,7 +9,8 @@ const EntrySchema = new Schema({
     title: { type: String },
     content: { type: String, required: true },
     origin: { type: String, required: true},
-    likes: { type: Array }
+    likes: { type: Array },
+    read: { type: Boolean, default: true },
     });
 
 export default mongoose.model("Entry", EntrySchema);

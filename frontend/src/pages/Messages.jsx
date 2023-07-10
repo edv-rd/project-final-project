@@ -11,11 +11,13 @@ const Messages = () => {
   return (
     <StyledWrapper>
       Messages
-      <StyledList>
-        {messageData.body.messages.map((message) => {
-          return <Entry key={message._id} entry={message} />;
-        })}
-      </StyledList>
+      {messageData.body.messages && (
+        <StyledList>
+          {messageData.body.messages.map((message) => {
+            return <Entry key={message._id} entry={message} />;
+          })}
+        </StyledList>
+      )}
     </StyledWrapper>
   );
 };

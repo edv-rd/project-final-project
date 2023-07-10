@@ -8,6 +8,7 @@ const StyledContainer = styled.div`
   gap: 10px;
   border-bottom: 2px solid black;
   padding: 5px;
+  background-color: ${(props) => (props.$read ? "white" : "red")};
 
   :hover {
     background-color: aliceblue;
@@ -26,7 +27,7 @@ const StyledParagraph = styled.p`
 
 const Entry = ({ entry }) => {
   return (
-    <StyledContainer>
+    <StyledContainer $read={entry.read}>
       <ProfileCard user={entry.postedBy} />
       <StyledText>
         <StyledParagraph>{entry.postedAt}</StyledParagraph>

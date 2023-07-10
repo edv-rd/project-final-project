@@ -1,11 +1,10 @@
-import { useParams } from "react-router-dom";
-import API_URL from "../utils/urls.js";
+import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 
-import token from "../utils/token.js";
+import fetchAuth from "../utils/fetch.js";
 
 const MessageForm = () => {
-  const { profileId } = useParams();
+  const profileId = useOutletContext();
   const [messageContent, setMessageContent] = useState("");
   const [titleContent, setTitleContent] = useState("");
 
@@ -16,21 +15,19 @@ const MessageForm = () => {
     setTitleContent(event.target.value);
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    fetch(`${API_URL}/message`, {
+  const handleFormSubmit = () => {
+    const fetch = {
+      endpoint: "messages",
       method: "POST",
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         content: messageContent,
         title: titleContent,
         postedTo: profileId,
+        read: false,
       }),
-    });
-    window.location.reload();
+    };
+
+    fetchAuth(fetch).then((res) => console.log(res));
   };
   return (
     <form onSubmit={handleFormSubmit}>
