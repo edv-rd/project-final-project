@@ -168,5 +168,6 @@ app.delete("/upload", async (req, res) => {
 
 
 app.listen(port, () => {
+  console.log(process.env.API_URL);
   console.log(`server körandes på http://localhost:${port}`);
 });
