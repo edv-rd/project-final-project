@@ -4,7 +4,7 @@ import User from "../db/userModel.js";
 export const authenticateUser = async (req, res, next) => {
     const accessToken = req.header("Authorization");
     try {
-      const user = await User.findOne({ accessToken: accessToken });
+      const user = await User.findOne({ accessToken: accessToken }).select("+accessToken");
 
       if (user) {
         req.user = user._id;

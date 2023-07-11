@@ -32,7 +32,7 @@ router.patch("/read/:id", authenticateUser, async (req, res) => {
       const id = req.params.id;
       const entry = await Entry.findByIdAndUpdate(
         { _id: id },
-        { $push: {"likes": id} } 
+        { $push: {"likes": req.user} } 
       ).populate("likes");
   
       if (entry) {

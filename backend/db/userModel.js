@@ -18,10 +18,12 @@ const UserSchema = new Schema({
       password: {
         type: String,
         required: true,
+        select: false
       },
       accessToken: {
         type: String,
         default: () => crypto.randomBytes(128).toString("hex"),
+        select: false
       },
       profile: {
         about_me: { type: String, default: "",  maxlength: 200 },

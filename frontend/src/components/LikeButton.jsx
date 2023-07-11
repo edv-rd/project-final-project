@@ -1,15 +1,8 @@
 /* eslint-disable react/prop-types */
-import { likeEntry } from "../utils/entry";
 
-const LikeButton = ({ entry, setLikeList }) => {
-  const handleOnClick = () => {
-    likeEntry(entry._id).then((res) => {
-      console.log(res.entry.likes);
-      setLikeList(res.entry.likes);
-    });
-  };
+const LikeButton = ({ onClick }) => {
   return (
-    <button type="button" onClick={handleOnClick}>
+    <button type="button" onClick={onClick}>
       Like!
     </button>
   );

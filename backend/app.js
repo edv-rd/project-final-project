@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt-nodejs";
 import User from "./db/userModel.js";
 
-
 import multer from "multer";
 import sharp from "sharp";
 
@@ -94,11 +93,13 @@ app.use("/bulletin", bulletin);
 
 app.use("/messages", messages);
 
-app.use("/entry", entry)
+app.use("/entry", entry);
 
 app.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email })
+      .select("+password")
+      .select("+accessToken");
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       res.status(200).json({
         success: true,
