@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import ProfileCard from "../components/ProfileCard";
 import styled from "styled-components";
 
@@ -30,7 +30,9 @@ const StyledTextContainer = styled.div`
 
 // eslint-disable-next-line react/prop-types
 const ProfileView = () => {
-  const profileData = useLoaderData();
+  const context = useOutletContext();
+  const profileData = context.profileData;
+
   return (
     <StyledWrapper>
       <ProfileCard user={profileData} />

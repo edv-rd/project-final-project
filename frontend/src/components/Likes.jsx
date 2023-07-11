@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
 import LikeButton from "./LikeButton";
 import LikeList from "./LikeList";
 import { likeEntry } from "../utils/entry";
+import fetchAuth from "../utils/fetch";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -18,9 +19,18 @@ const StyledContainer = styled.div``;
 const Likes = ({ entry }) => {
   const [likeList, setLikeList] = useState(entry.likes);
 
+  const fetchLikes = (entryId) => {
+    const fetch = {
+      endpoint: "entry/likes",
+      method: "GET",
+      id: `${entryId}`,
+    };
+
+    fetchAuth(fetch).then((res) => setLikeList(res));
+  };
+
   const handleOnClick = () => {
     likeEntry(entry._id).then((res) => {
-      console.log(res.entry.likes);
       setLikeList(res.entry.likes);
     });
   };
@@ -28,11 +38,7 @@ const Likes = ({ entry }) => {
   return (
     <StyledWrapper>
       <StyledContainer>
-        <LikeButton
-          entry={entry}
-          setLikeList={setLikeList}
-          onClick={handleOnClick}
-        />
+        <LikeButton onClick={handleOnClick} />
       </StyledContainer>
       <StyledContainer>
         <LikeList likeList={likeList} />

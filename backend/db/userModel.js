@@ -29,11 +29,10 @@ const UserSchema = new Schema({
         about_me: { type: String, default: "",  maxlength: 200 },
         interests: { type: String, default: "",  maxlength: 200 },
         occupation: { type: String, default: "",  maxlength: 200 },
-        // TODO: picture uploading
         // TODO: birthday
         birthday: { type: String, default: "" },
         image: {
-          type: Buffer
+          type: Buffer,
           }
         
       },

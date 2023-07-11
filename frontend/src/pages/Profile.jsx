@@ -14,10 +14,13 @@ const StyledContainer = styled.div`
 // eslint-disable-next-line react/prop-types
 const Profile = () => {
   const profileData = useLoaderData();
+  const loggedInId = useOutletContext();
+  console.log(profileData);
+  console.log(loggedInId);
   return (
     <StyledContainer>
       <ProfileMenu user={profileData} />
-      <Outlet context={useOutletContext()} />
+      <Outlet context={{ profileData: profileData, loggedInId: loggedInId }} />
     </StyledContainer>
   );
 };

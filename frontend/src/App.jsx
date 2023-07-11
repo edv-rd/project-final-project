@@ -54,9 +54,6 @@ const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfileView />,
-            loader: async ({ params }) => {
-              return fetch(`${API_URL}/profile/${params.profileId}`);
-            },
           },
           {
             path: "guestbook",
@@ -89,7 +86,7 @@ const router = createBrowserRouter([
               });
             },
           },
-        ],
+        ], // here ends child for /profileid
       },
       {
         path: "profile/edit",
